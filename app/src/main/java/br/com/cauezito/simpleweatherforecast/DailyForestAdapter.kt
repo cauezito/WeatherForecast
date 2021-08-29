@@ -13,7 +13,7 @@ class DailyForecastViewHolder(view : View) : RecyclerView.ViewHolder(view) {
     private val tvDescription : TextView = view.findViewById<TextView>(R.id.tvDescription)
 
     fun bind(dailyForecast: DailyForecast){
-        tvTemp.text = dailyForecast.temp.toString()
+        tvTemp.text = String.format("%.2f", dailyForecast.temp)
         tvDescription.text = dailyForecast.description
     }
 }
