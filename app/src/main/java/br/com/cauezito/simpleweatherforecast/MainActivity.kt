@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.cauezito.simpleweatherforecast.databinding.ActivityMainBinding
 import java.util.*
 
@@ -18,6 +19,12 @@ class MainActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
+        val forecastList = binding.rvForecastList
+        val dailyForestAdapter = DailyForestAdapter()
+
+        forecastList.layoutManager = LinearLayoutManager(this)
+        forecastList.adapter = dailyForestAdapter
+
         binding.btEnter.setOnClickListener{view ->
             val zipCode = binding.etZipcode.text.toString()
 
@@ -28,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         //observer will be updated anytime our live data changes in the repository
         val weeklyForecastObsever = Observer<List<DailyForecast>> {forecastItems ->
             //update our list adapter
-            Toast.makeText(this, "Loaded Items", Toast.LENGTH_SHORT).show()
+            dailyForestAdapter.submitList(forecastItems)
         }
 
         forecastRepository.weeklyForecast.observe(this, weeklyForecastObsever)
