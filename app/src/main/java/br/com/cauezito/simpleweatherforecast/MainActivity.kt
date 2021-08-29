@@ -20,7 +20,9 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         val forecastList = binding.rvForecastList
-        val dailyForestAdapter = DailyForestAdapter()
+        val dailyForestAdapter = DailyForestAdapter(){
+            Toast.makeText(this, it.description, Toast.LENGTH_SHORT).show()
+        }
 
         forecastList.layoutManager = LinearLayoutManager(this)
         forecastList.adapter = dailyForestAdapter
