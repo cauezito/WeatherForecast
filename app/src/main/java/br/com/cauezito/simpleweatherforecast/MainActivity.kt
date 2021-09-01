@@ -1,5 +1,6 @@
 package br.com.cauezito.simpleweatherforecast
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -7,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.cauezito.simpleweatherforecast.databinding.ActivityMainBinding
+import br.com.cauezito.simpleweatherforecast.details.ForecastDetailsActivity
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -21,7 +23,8 @@ class MainActivity : AppCompatActivity() {
 
         val forecastList = binding.rvForecastList
         val dailyForestAdapter = DailyForestAdapter(){
-            Toast.makeText(this, it.description, Toast.LENGTH_SHORT).show()
+            val forecastDetailsIntent = Intent(this, ForecastDetailsActivity::class.java)
+            startActivity(forecastDetailsIntent)
         }
 
         forecastList.layoutManager = LinearLayoutManager(this)

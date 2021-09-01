@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SimpleWeatherForecast">
         <activity
+            android:name=".details.ForecastDetailsActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
