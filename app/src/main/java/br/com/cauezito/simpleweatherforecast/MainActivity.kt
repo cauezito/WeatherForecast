@@ -9,10 +9,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.cauezito.simpleweatherforecast.databinding.ActivityMainBinding
 import br.com.cauezito.simpleweatherforecast.details.ForecastDetailsActivity
+import br.com.cauezito.simpleweatherforecast.location.LocationEntryFragment
 import br.com.cauezito.simpleweatherforecast.util.SharedPreferencesUtil
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), AppNavigatorInterface {
 
     private lateinit var binding : ActivityMainBinding
     private val forecastRepository = ForecastRepository()
@@ -30,12 +31,7 @@ class MainActivity : AppCompatActivity() {
         forecastList.layoutManager = LinearLayoutManager(this)
         forecastList.adapter = dailyForestAdapter
 
-        binding.btEnter.setOnClickListener{view ->
-            val zipCode = binding.etZipcode.text.toString()
 
-            if (zipCode.length <= 5) Toast.makeText(this, "Invalid!", Toast.LENGTH_SHORT).show()
-            else forecastRepository.loadForecast(zipCode)
-        }
 
         //observer will be updated anytime our live data changes in the repository
         val weeklyForecastObsever = Observer<List<DailyForecast>> {forecastItems ->
@@ -44,6 +40,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         forecastRepository.weeklyForecast.observe(this, weeklyForecastObsever)
+
+        supportFragmentManager
+            .beginTransaction()
+            .add(R.id.flContainer, LocationEntryFragment())
+            .commit()
     }
 
     fun showForecastDetail(forecast : DailyForecast){
@@ -51,5 +52,9 @@ class MainActivity : AppCompatActivity() {
         forecastDetailsIntent.putExtra("temperature", forecast.temp)
         forecastDetailsIntent.putExtra("detail", forecast.description)
         startActivity(forecastDetailsIntent)
+    }
+
+    override fun navigateToCurrentForecast(zipCode: String) {
+        forecastRepository.loadForecast(zipCode)
     }
 }
