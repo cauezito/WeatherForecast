@@ -7,13 +7,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import br.com.cauezito.simpleweatherforecast.util.ForecastUtil
 
 class DailyForecastViewHolder(view : View) : RecyclerView.ViewHolder(view) {
     private val tvTemp : TextView = view.findViewById<TextView>(R.id.tvTemp)
     private val tvDescription : TextView = view.findViewById<TextView>(R.id.tvDescription)
 
     fun bind(dailyForecast: DailyForecast){
-        tvTemp.text = String.format("%.2f", dailyForecast.temp)
+        tvTemp.text = ForecastUtil.formatForecastForShow(dailyForecast.temp)
         tvDescription.text = dailyForecast.description
     }
 }

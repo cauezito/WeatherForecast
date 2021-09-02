@@ -22,9 +22,8 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         val forecastList = binding.rvForecastList
-        val dailyForestAdapter = DailyForestAdapter(){
-            val forecastDetailsIntent = Intent(this, ForecastDetailsActivity::class.java)
-            startActivity(forecastDetailsIntent)
+        val dailyForestAdapter = DailyForestAdapter(){ dailyForecast ->
+            showForecastDetail(dailyForecast)
         }
 
         forecastList.layoutManager = LinearLayoutManager(this)
@@ -44,5 +43,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         forecastRepository.weeklyForecast.observe(this, weeklyForecastObsever)
+    }
+
+    fun showForecastDetail(forecast : DailyForecast){
+        val forecastDetailsIntent = Intent(this, ForecastDetailsActivity::class.java)
+        forecastDetailsIntent.putExtra("temperature", forecast.temp)
+        forecastDetailsIntent.putExtra("detail", forecast.description)
+        startActivity(forecastDetailsIntent)
     }
 }
