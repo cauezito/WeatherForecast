@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import br.com.cauezito.simpleweatherforecast.R
 import br.com.cauezito.simpleweatherforecast.databinding.ActivityForecastDetailsBinding
 import br.com.cauezito.simpleweatherforecast.util.ForecastUtil
+import br.com.cauezito.simpleweatherforecast.util.SharedPreferencesUtil
 
 class ForecastDetailsActivity : AppCompatActivity() {
 
@@ -23,7 +24,8 @@ class ForecastDetailsActivity : AppCompatActivity() {
         val temperature = intent.getFloatExtra("temperature", 0f)
         val detail = intent.getStringExtra("detail")
 
-        binding.tvTemperature.text = ForecastUtil.formatForecastForShow(temperature)
+        var sharedPreferencesUtil = SharedPreferencesUtil(this)
+        binding.tvTemperature.text = ForecastUtil.formatForecastForShow(temperature, sharedPreferencesUtil.getTemperatureDisplay() )
         binding.tvDetail.text = detail.toString()
     }
 

@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.cauezito.simpleweatherforecast.databinding.ActivityMainBinding
 import br.com.cauezito.simpleweatherforecast.details.ForecastDetailsActivity
+import br.com.cauezito.simpleweatherforecast.util.SharedPreferencesUtil
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         val forecastList = binding.rvForecastList
-        val dailyForestAdapter = DailyForestAdapter(){ dailyForecast ->
+        val dailyForestAdapter = DailyForestAdapter(SharedPreferencesUtil(this)){ dailyForecast ->
             showForecastDetail(dailyForecast)
         }
 

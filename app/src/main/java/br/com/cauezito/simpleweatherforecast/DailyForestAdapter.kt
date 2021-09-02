@@ -8,18 +8,20 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.cauezito.simpleweatherforecast.util.ForecastUtil
+import br.com.cauezito.simpleweatherforecast.util.SharedPreferencesUtil
 
-class DailyForecastViewHolder(view : View) : RecyclerView.ViewHolder(view) {
+class DailyForecastViewHolder(view : View, private val sharedPreferencesUtil: SharedPreferencesUtil) : RecyclerView.ViewHolder(view) {
     private val tvTemp : TextView = view.findViewById<TextView>(R.id.tvTemp)
     private val tvDescription : TextView = view.findViewById<TextView>(R.id.tvDescription)
 
     fun bind(dailyForecast: DailyForecast){
-        tvTemp.text = ForecastUtil.formatForecastForShow(dailyForecast.temp)
+        tvTemp.text = ForecastUtil.formatForecastForShow(dailyForecast.temp, sharedPreferencesUtil.getTemperatureDisplay())
         tvDescription.text = dailyForecast.description
     }
 }
 
-class DailyForestAdapter(private val clickHandler : (DailyForecast) -> Unit) : ListAdapter<DailyForecast, DailyForecastViewHolder>(DIFF_CONFIG) {
+class DailyForestAdapter(private val sharedPreferencesUtil: SharedPreferencesUtil ,
+                         private val clickHandler : (DailyForecast) -> Unit) : ListAdapter<DailyForecast, DailyForecastViewHolder>(DIFF_CONFIG) {
 
     companion object {
         val DIFF_CONFIG = object : DiffUtil.ItemCallback<DailyForecast>() {
@@ -41,7 +43,7 @@ class DailyForestAdapter(private val clickHandler : (DailyForecast) -> Unit) : L
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DailyForecastViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_daily_forecast, parent, false)
-        return DailyForecastViewHolder(itemView)
+        return DailyForecastViewHolder(itemView, sharedPreferencesUtil)
     }
 
     override fun onBindViewHolder(holder: DailyForecastViewHolder, position: Int) {

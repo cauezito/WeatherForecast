@@ -7,22 +7,30 @@ import android.widget.Toast
 import br.com.cauezito.simpleweatherforecast.R
 
 class ForecastUtil {
-
     companion object {
-        fun formatForecastForShow(temperature: Float): String {
-            return String.format("%.2fº", temperature)
+        fun formatForecastForShow(temperature: Float, temperatureDisplaySetting: TemperatureDisplaySetting): String {
+
+            return when(temperatureDisplaySetting) {
+                TemperatureDisplaySetting.Fahrenheit -> String.format("%.2fºF", temperature)
+                TemperatureDisplaySetting.Celsius -> {
+                    val temp = (temperature - 32f) * (5f/9f)
+                    String.format("%.2fºC", temp)
+                }
+            }
         }
 
         fun showDialog(context: Context){
+            val sharedPreferencesUtil = SharedPreferencesUtil(context)
+
             val dialogBuilder = AlertDialog.Builder(context)
                 .setTitle(context.resources.getString(R.string.choose_display_unit))
                 .setMessage(context.resources.getString(R.string.which_temperature))
                 .setPositiveButton("Fº"){ _, _ ->
-                    Toast.makeText(context, "2", Toast.LENGTH_SHORT).show()
+                   sharedPreferencesUtil.updateSetting(TemperatureDisplaySetting.Fahrenheit)
                 }
                 .setNeutralButton("Cº", object : DialogInterface.OnClickListener{
                     override fun onClick(p0: DialogInterface?, p1: Int) {
-                        Toast.makeText(context, "1", Toast.LENGTH_SHORT).show()
+                       sharedPreferencesUtil.updateSetting(TemperatureDisplaySetting.Celsius)
                     }
 
                 })
