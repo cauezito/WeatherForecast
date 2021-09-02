@@ -2,6 +2,10 @@ package br.com.cauezito.simpleweatherforecast.details
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import br.com.cauezito.simpleweatherforecast.R
 import br.com.cauezito.simpleweatherforecast.databinding.ActivityForecastDetailsBinding
@@ -21,6 +25,21 @@ class ForecastDetailsActivity : AppCompatActivity() {
 
         binding.tvTemperature.text = ForecastUtil.formatForecastForShow(temperature)
         binding.tvDetail.text = detail.toString()
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater : MenuInflater = menuInflater
+        inflater.inflate(R.menu.settings_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menuUnits -> {
+                ForecastUtil.showDialog(this)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

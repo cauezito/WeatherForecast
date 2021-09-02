@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Simple Weather Forecast</string>
+
+
+    <string name="choose_display_unit">Please, choose the display unit!</string>
+    <string name="which_temperature">Choose which temperature unit to user for temperature display</string>
+    <string name="after_restart_app">Setting will take affect on app restart!</string>
 </resources>
