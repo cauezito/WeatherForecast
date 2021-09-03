@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(), AppNavigatorInterface {
     }
 
     override fun navigateToForecastDetails(forecast: DailyForecast) {
-        val action = CurrentForecastFragmentDirections.actionCurrentForecastFragmentToForecastDetailsFragment()
+        val action = CurrentForecastFragmentDirections.actionCurrentForecastFragmentToForecastDetailsFragment(forecast.temp, forecast.description)
         findNavController(R.id.navContainer).navigate(action)
     }
 

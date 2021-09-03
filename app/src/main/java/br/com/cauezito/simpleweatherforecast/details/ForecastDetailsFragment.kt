@@ -5,13 +5,15 @@ import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import br.com.cauezito.simpleweatherforecast.R
-import br.com.cauezito.simpleweatherforecast.databinding.FragmentCurrentForecastBinding
 import br.com.cauezito.simpleweatherforecast.databinding.FragmentForecastDetailsBinding
 import br.com.cauezito.simpleweatherforecast.util.ForecastUtil
 import br.com.cauezito.simpleweatherforecast.util.SharedPreferencesUtil
 
 class ForecastDetailsFragment : Fragment() {
+
+    private val args : ForecastDetailsFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,11 +24,8 @@ class ForecastDetailsFragment : Fragment() {
 
         val sharedPreferencesUtil = SharedPreferencesUtil(requireContext())
 
-       // val temperature = intent.getFloatExtra("temperature", 0f)
-       // val detail = intent.getStringExtra("detail")
-
-      //  binding.tvTemperature.text = ForecastUtil.formatForecastForShow(temperature, sharedPreferencesUtil.getTemperatureDisplay() )
-        //binding.tvDetail.text = detail.toString()
+        binding.tvTemperature.text = ForecastUtil.formatForecastForShow(args.temperature, sharedPreferencesUtil.getTemperatureDisplay() )
+        binding.tvDetail.text = args.detail
 
        return binding.root
     }

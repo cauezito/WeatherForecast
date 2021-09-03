@@ -26,5 +26,12 @@
     <fragment
         android:id="@+id/forecastDetailsFragment"
         android:name="br.com.cauezito.simpleweatherforecast.details.ForecastDetailsFragment"
-        android:label="ForecastDetailsFragment" />
+        android:label="ForecastDetailsFragment" >
+        <argument
+            android:name="temperature"
+            app:argType="float" />
+        <argument
+            android:name="detail"
+            app:argType="string" />
+    </fragment>
 </navigation>
