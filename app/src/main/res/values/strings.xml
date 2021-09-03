@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Simple Weather Forecast</string>
+    <string name="app_name">Weather Forecast</string>
 
 
     <string name="choose_display_unit">Please, choose the display unit!</string>
