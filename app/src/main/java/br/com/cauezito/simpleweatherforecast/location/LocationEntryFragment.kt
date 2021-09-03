@@ -44,7 +44,7 @@ class LocationEntryFragment : Fragment() {
 
     companion object {
         @JvmStatic // if your Kotlin code is called from Java, it makes sense to add the annotation
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance() =
             LocationEntryFragment().apply {
                 arguments = Bundle().apply {
                 }

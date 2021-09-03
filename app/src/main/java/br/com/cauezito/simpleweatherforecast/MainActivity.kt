@@ -16,30 +16,11 @@ import java.util.*
 class MainActivity : AppCompatActivity(), AppNavigatorInterface {
 
     private lateinit var binding : ActivityMainBinding
-    private val forecastRepository = ForecastRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
-        val forecastList = binding.rvForecastList
-        val dailyForestAdapter = DailyForestAdapter(SharedPreferencesUtil(this)){ dailyForecast ->
-            showForecastDetail(dailyForecast)
-        }
-
-        forecastList.layoutManager = LinearLayoutManager(this)
-        forecastList.adapter = dailyForestAdapter
-
-
-
-        //observer will be updated anytime our live data changes in the repository
-        val weeklyForecastObsever = Observer<List<DailyForecast>> {forecastItems ->
-            //update our list adapter
-            dailyForestAdapter.submitList(forecastItems)
-        }
-
-        forecastRepository.weeklyForecast.observe(this, weeklyForecastObsever)
 
         supportFragmentManager
             .beginTransaction()
@@ -47,14 +28,10 @@ class MainActivity : AppCompatActivity(), AppNavigatorInterface {
             .commit()
     }
 
-    fun showForecastDetail(forecast : DailyForecast){
-        val forecastDetailsIntent = Intent(this, ForecastDetailsActivity::class.java)
-        forecastDetailsIntent.putExtra("temperature", forecast.temp)
-        forecastDetailsIntent.putExtra("detail", forecast.description)
-        startActivity(forecastDetailsIntent)
-    }
-
     override fun navigateToCurrentForecast(zipCode: String) {
-        forecastRepository.loadForecast(zipCode)
+       supportFragmentManager
+           .beginTransaction()
+           .replace(R.id.flContainer, CurrentForecastFragment.newInstance(zipCode))
+           .commit()
     }
 }

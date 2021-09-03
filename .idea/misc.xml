@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/layout/activity_forecast_details.xml" value="0.1859375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1859375" />
+        <entry key="app/src/main/res/layout/fragment_current_forecast.xml" value="0.3484375" />
         <entry key="app/src/main/res/layout/fragment_location_entry.xml" value="0.3484375" />
         <entry key="app/src/main/res/layout/item_daily_forecast.xml" value="0.5" />
         <entry key="app/src/main/res/menu/settings_menu.xml" value="0.1859375" />
