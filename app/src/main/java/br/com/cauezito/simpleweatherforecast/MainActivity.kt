@@ -34,4 +34,11 @@ class MainActivity : AppCompatActivity(), AppNavigatorInterface {
            .replace(R.id.flContainer, CurrentForecastFragment.newInstance(zipCode))
            .commit()
     }
+
+    override fun navigateToLocationEntry() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.flContainer, LocationEntryFragment())
+            .commit()
+    }
 }

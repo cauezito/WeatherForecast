@@ -1,5 +1,6 @@
 package br.com.cauezito.simpleweatherforecast
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -17,6 +18,12 @@ import br.com.cauezito.simpleweatherforecast.util.SharedPreferencesUtil
 class CurrentForecastFragment : Fragment() {
 
     private val forecastRepository = ForecastRepository()
+    private lateinit var appNavigatorInterface: AppNavigatorInterface
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        appNavigatorInterface = context as AppNavigatorInterface
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +38,11 @@ class CurrentForecastFragment : Fragment() {
         val binding: FragmentCurrentForecastBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_current_forecast, container, false)
 
         val zipcode = requireArguments().getString(KEY_ZIPCODE) ?: ""
+        val fabLocationEntryButton = binding.fabLocationEntryButton
+
+        fabLocationEntryButton.setOnClickListener {
+            appNavigatorInterface.navigateToLocationEntry()
+        }
 
         val forecastList = binding.rvForecastList
         val dailyForestAdapter = DailyForestAdapter(SharedPreferencesUtil(requireContext())){ dailyForecast ->
