@@ -11,8 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.cauezito.simpleweatherforecast.databinding.FragmentCurrentForecastBinding
-import br.com.cauezito.simpleweatherforecast.databinding.FragmentLocationEntryBinding
-import br.com.cauezito.simpleweatherforecast.details.ForecastDetailsActivity
+import br.com.cauezito.simpleweatherforecast.details.ForecastDetailsFragment
 import br.com.cauezito.simpleweatherforecast.util.SharedPreferencesUtil
 
 class CurrentForecastFragment : Fragment() {
@@ -46,7 +45,7 @@ class CurrentForecastFragment : Fragment() {
 
         val forecastList = binding.rvForecastList
         val dailyForestAdapter = DailyForestAdapter(SharedPreferencesUtil(requireContext())){ dailyForecast ->
-            showForecastDetail(dailyForecast)
+            showForecastDetails(dailyForecast)
         }
 
         forecastList.layoutManager = LinearLayoutManager(requireContext())
@@ -64,11 +63,8 @@ class CurrentForecastFragment : Fragment() {
         return binding.root
     }
 
-    fun showForecastDetail(forecast : DailyForecast){
-        val forecastDetailsIntent = Intent(requireContext(), ForecastDetailsActivity::class.java)
-        forecastDetailsIntent.putExtra("temperature", forecast.temp)
-        forecastDetailsIntent.putExtra("detail", forecast.description)
-        startActivity(forecastDetailsIntent)
+    fun showForecastDetails(forecast : DailyForecast){
+        appNavigatorInterface.navigateToForecastDetails(forecast)
     }
 
     companion object {

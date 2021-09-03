@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/locationEntryFragment">
+
+    <fragment
+        android:id="@+id/locationEntryFragment"
+        android:name="br.com.cauezito.simpleweatherforecast.location.LocationEntryFragment"
+        android:label="LocationEntryFragment" >
+        <action
+            android:id="@+id/action_locationEntryFragment_to_currentForecastFragment"
+            app:destination="@id/currentForecastFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/currentForecastFragment"
+        android:name="br.com.cauezito.simpleweatherforecast.CurrentForecastFragment"
+        android:label="CurrentForecastFragment" >
+        <action
+            android:id="@+id/action_currentForecastFragment_to_locationEntryFragment"
+            app:destination="@id/locationEntryFragment" />
+        <action
+            android:id="@+id/action_currentForecastFragment_to_forecastDetailsFragment"
+            app:destination="@id/forecastDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/forecastDetailsFragment"
+        android:name="br.com.cauezito.simpleweatherforecast.details.ForecastDetailsFragment"
+        android:label="ForecastDetailsFragment" />
+</navigation>
