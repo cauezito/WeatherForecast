@@ -1,4 +1,4 @@
-package br.com.cauezito.simpleweatherforecast.location
+package br.com.cauezito.simpleweatherforecast.weather
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

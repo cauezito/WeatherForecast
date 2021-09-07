@@ -1,4 +1,4 @@
-package br.com.cauezito.simpleweatherforecast
+package br.com.cauezito.simpleweatherforecast.weather
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import br.com.cauezito.simpleweatherforecast.R
 import br.com.cauezito.simpleweatherforecast.util.ForecastUtil
 import br.com.cauezito.simpleweatherforecast.util.SharedPreferencesUtil
 
@@ -21,7 +22,9 @@ class DailyForecastViewHolder(view : View, private val sharedPreferencesUtil: Sh
 }
 
 class DailyForestAdapter(private val sharedPreferencesUtil: SharedPreferencesUtil ,
-                         private val clickHandler : (DailyForecast) -> Unit) : ListAdapter<DailyForecast, DailyForecastViewHolder>(DIFF_CONFIG) {
+                         private val clickHandler : (DailyForecast) -> Unit) : ListAdapter<DailyForecast, DailyForecastViewHolder>(
+    DIFF_CONFIG
+) {
 
     companion object {
         val DIFF_CONFIG = object : DiffUtil.ItemCallback<DailyForecast>() {

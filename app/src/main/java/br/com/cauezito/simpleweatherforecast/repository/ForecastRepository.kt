@@ -1,7 +1,8 @@
-package br.com.cauezito.simpleweatherforecast
+package br.com.cauezito.simpleweatherforecast.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import br.com.cauezito.simpleweatherforecast.weather.DailyForecast
 import kotlin.random.Random
 
 class ForecastRepository {

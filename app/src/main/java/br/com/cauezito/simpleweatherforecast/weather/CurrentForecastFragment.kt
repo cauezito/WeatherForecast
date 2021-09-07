@@ -1,7 +1,5 @@
-package br.com.cauezito.simpleweatherforecast
+package br.com.cauezito.simpleweatherforecast.weather
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,31 +9,37 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import br.com.cauezito.simpleweatherforecast.R
 import br.com.cauezito.simpleweatherforecast.databinding.FragmentCurrentForecastBinding
-import br.com.cauezito.simpleweatherforecast.databinding.FragmentWeeklyForecastBinding
-import br.com.cauezito.simpleweatherforecast.details.ForecastDetailsFragment
+import br.com.cauezito.simpleweatherforecast.repository.ForecastRepository
 import br.com.cauezito.simpleweatherforecast.util.SharedPreferencesUtil
 
-class WeeklyForecastFragment : Fragment() {
+class CurrentForecastFragment : Fragment() {
 
     private val forecastRepository = ForecastRepository()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentWeeklyForecastBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_weekly_forecast, container, false)
-
-        val fabLocationEntryButton = binding.fabLocationEntryButton
-
+        val binding: FragmentCurrentForecastBinding = DataBindingUtil.inflate(inflater,
+            R.layout.fragment_current_forecast, container, false)
         var zipcode : String? = ""
 
         arguments?.let {
-            zipcode = it.getString(CurrentForecastFragment.KEY_ZIPCODE) as String
+            zipcode = it.getString(KEY_ZIPCODE) as String
         }
 
+        val fabLocationEntryButton = binding.fabLocationEntryButton
+
         fabLocationEntryButton.setOnClickListener {
-            showLocationDetails()
+            showLocationEntry()
         }
 
         val forecastList = binding.rvForecastList
@@ -47,7 +51,7 @@ class WeeklyForecastFragment : Fragment() {
         forecastList.adapter = dailyForestAdapter
 
         //observer will be updated anytime our live data changes in the repository
-        val weeklyForecastObsever = Observer<List<DailyForecast>> {forecastItems ->
+        val weeklyForecastObsever = Observer<List<DailyForecast>> { forecastItems ->
             //update our list adapter
             dailyForestAdapter.submitList(forecastItems)
         }
@@ -58,13 +62,13 @@ class WeeklyForecastFragment : Fragment() {
         return binding.root
     }
 
-    fun showForecastDetails(forecast : DailyForecast){
-        val action = WeeklyForecastFragmentDirections.actionWeeklyForecastFragmentToForecastDetailsFragment2(forecast.temp, forecast.description)
+    fun showLocationEntry(){
+        val action = CurrentForecastFragmentDirections.actionCurrentForecastFragmentToLocationEntryFragment()
         findNavController().navigate(action)
     }
 
-    fun showLocationDetails(){
-        val action = WeeklyForecastFragmentDirections.actionWeeklyForecastFragmentToLocationEntryFragment2()
+    fun showForecastDetails(forecast : DailyForecast){
+        val action = CurrentForecastFragmentDirections.actionCurrentForecastFragmentToForecastDetailsFragment(forecast.temp, forecast.description)
         findNavController().navigate(action)
     }
 
@@ -72,7 +76,7 @@ class WeeklyForecastFragment : Fragment() {
         const val KEY_ZIPCODE = "KEY_ZIP_CODE"
         @JvmStatic // if your Kotlin code is called from Java, it makes sense to add the annotation
         fun newInstance(zipcode : String) =
-            WeeklyForecastFragment().apply {
+            CurrentForecastFragment().apply {
                 arguments = Bundle().apply {
                     arguments?.putString(KEY_ZIPCODE, zipcode)
                 }

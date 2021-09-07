@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/locationEntryFragment"
-        android:name="br.com.cauezito.simpleweatherforecast.location.LocationEntryFragment"
+        android:name="br.com.cauezito.simpleweatherforecast.weather.LocationEntryFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_location_entry"/>
     <fragment
         android:id="@+id/currentForecastFragment"
-        android:name="br.com.cauezito.simpleweatherforecast.CurrentForecastFragment"
+        android:name="br.com.cauezito.simpleweatherforecast.weather.CurrentForecastFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_current_forecast">
         <action
@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/forecastDetailsFragment"
-        android:name="br.com.cauezito.simpleweatherforecast.details.ForecastDetailsFragment"
+        android:name="br.com.cauezito.simpleweatherforecast.weather.ForecastDetailsFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_forecast_details">
         <argument
@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/weeklyForecastFragment"
-        android:name="br.com.cauezito.simpleweatherforecast.WeeklyForecastFragment"
+        android:name="br.com.cauezito.simpleweatherforecast.weather.WeeklyForecastFragment"
         android:label="WeeklyForecastFragment"
         tools:layout="@layout/fragment_weekly_forecast">
         <action

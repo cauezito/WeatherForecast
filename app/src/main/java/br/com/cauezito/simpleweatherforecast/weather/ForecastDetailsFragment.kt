@@ -1,6 +1,5 @@
-package br.com.cauezito.simpleweatherforecast.details
+package br.com.cauezito.simpleweatherforecast.weather
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
