@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Weather Forecast</string>
 
-
     <string name="choose_display_unit">Please, choose the display unit!</string>
     <string name="which_temperature">Choose which temperature unit to user for temperature display</string>
     <string name="after_restart_app">Setting will take affect on app restart!</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="bottom_nav_current">Today</string>
+    <string name="bottom_nav_weekly">Weekly</string>
 </resources>

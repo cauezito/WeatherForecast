@@ -7,10 +7,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import br.com.cauezito.simpleweatherforecast.databinding.ActivityMainBinding
-import br.com.cauezito.simpleweatherforecast.location.LocationEntryFragmentDirections
 import java.util.*
 
-class MainActivity : AppCompatActivity(), AppNavigatorInterface {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
 
@@ -20,23 +19,8 @@ class MainActivity : AppCompatActivity(), AppNavigatorInterface {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         val navController = findNavController(R.id.navContainer)
-        val appBarConfiguration = AppBarConfiguration(navController.graph)
-        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
-    }
 
-    override fun navigateToCurrentForecast(zipCode: String) {
-        val action = LocationEntryFragmentDirections.actionLocationEntryFragmentToCurrentForecastFragment()
-        findNavController(R.id.navContainer).navigate(action)
+        binding.toolbar.setTitle(R.string.app_name)
+        binding.bottomNavigationView.setupWithNavController(navController)
     }
-
-    override fun navigateToLocationEntry() {
-        val action = CurrentForecastFragmentDirections.actionCurrentForecastFragmentToLocationEntryFragment()
-        findNavController(R.id.navContainer).navigate(action)
-    }
-
-    override fun navigateToForecastDetails(forecast: DailyForecast) {
-        val action = CurrentForecastFragmentDirections.actionCurrentForecastFragmentToForecastDetailsFragment(forecast.temp, forecast.description)
-        findNavController(R.id.navContainer).navigate(action)
-    }
-
 }

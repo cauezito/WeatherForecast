@@ -12,34 +12,30 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.cauezito.simpleweatherforecast.databinding.FragmentCurrentForecastBinding
+import br.com.cauezito.simpleweatherforecast.databinding.FragmentWeeklyForecastBinding
 import br.com.cauezito.simpleweatherforecast.details.ForecastDetailsFragment
 import br.com.cauezito.simpleweatherforecast.util.SharedPreferencesUtil
 
-class CurrentForecastFragment : Fragment() {
+class WeeklyForecastFragment : Fragment() {
 
     private val forecastRepository = ForecastRepository()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentCurrentForecastBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_current_forecast, container, false)
-        var zipcode : String? = ""
-
-        arguments?.let {
-            zipcode = it.getString(KEY_ZIPCODE) as String
-        }
+        val binding: FragmentWeeklyForecastBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_weekly_forecast, container, false)
 
         val fabLocationEntryButton = binding.fabLocationEntryButton
 
+        var zipcode : String? = ""
+
+        arguments?.let {
+            zipcode = it.getString(CurrentForecastFragment.KEY_ZIPCODE) as String
+        }
+
         fabLocationEntryButton.setOnClickListener {
-            showLocationEntry()
+            showLocationDetails()
         }
 
         val forecastList = binding.rvForecastList
@@ -62,13 +58,13 @@ class CurrentForecastFragment : Fragment() {
         return binding.root
     }
 
-    fun showLocationEntry(){
-        val action = CurrentForecastFragmentDirections.actionCurrentForecastFragmentToLocationEntryFragment()
+    fun showForecastDetails(forecast : DailyForecast){
+        val action = WeeklyForecastFragmentDirections.actionWeeklyForecastFragmentToForecastDetailsFragment2(forecast.temp, forecast.description)
         findNavController().navigate(action)
     }
 
-    fun showForecastDetails(forecast : DailyForecast){
-        val action = CurrentForecastFragmentDirections.actionCurrentForecastFragmentToForecastDetailsFragment(forecast.temp, forecast.description)
+    fun showLocationDetails(){
+        val action = WeeklyForecastFragmentDirections.actionWeeklyForecastFragmentToLocationEntryFragment2()
         findNavController().navigate(action)
     }
 
@@ -76,7 +72,7 @@ class CurrentForecastFragment : Fragment() {
         const val KEY_ZIPCODE = "KEY_ZIP_CODE"
         @JvmStatic // if your Kotlin code is called from Java, it makes sense to add the annotation
         fun newInstance(zipcode : String) =
-            CurrentForecastFragment().apply {
+            WeeklyForecastFragment().apply {
                 arguments = Bundle().apply {
                     arguments?.putString(KEY_ZIPCODE, zipcode)
                 }

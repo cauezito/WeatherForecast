@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/currentForecastFragment"
+        android:icon="@mipmap/ic_launcher_round"
+        android:title="@string/bottom_nav_current"/>
+
+    <item android:id="@+id/weeklyForecastFragment"
+        android:icon="@mipmap/ic_launcher_round"
+        android:title="@string/bottom_nav_weekly"/>
+</menu>
