@@ -34,7 +34,7 @@ class WeeklyForecastFragment : Fragment() {
         }
 
         fabLocationEntryButton.setOnClickListener {
-            showLocationDetails()
+            showLocationEntry()
         }
 
         val forecastList = binding.rvForecastList
@@ -62,7 +62,7 @@ class WeeklyForecastFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-    fun showLocationDetails(){
+    fun showLocationEntry(){
         val action = WeeklyForecastFragmentDirections.actionWeeklyForecastFragmentToLocationEntryFragment2()
         findNavController().navigate(action)
     }

@@ -16,7 +16,7 @@ class ForecastRepository {
             DailyForecast(temp, getTemperatureDescription(temp))
         }
 
-        _weeklyForecast.setValue(forecastItems)
+        _weeklyForecast.value = forecastItems
     }
 
     private fun getTemperatureDescription(temp : Float) : String {
