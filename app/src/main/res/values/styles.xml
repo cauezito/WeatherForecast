@@ -2,10 +2,9 @@
 <resources>
 
  <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-     <item name="colorPrimary">@color/teal_200</item>
+     <item name="colorPrimary">#22776E</item>
      <item name="colorPrimaryDark">#0B6A61</item>
-     <item name="colorAccent">#98FAF0</item>
-
+     <item name="colorAccent">#3E988F</item>
  </style>
 
 

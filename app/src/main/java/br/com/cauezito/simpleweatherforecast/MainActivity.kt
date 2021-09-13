@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.navContainer)
 
         binding.toolbar.setTitle(R.string.app_name)
+        binding.toolbar.setTitleTextColor(resources.getColor(R.color.white))
         binding.bottomNavigationView.setupWithNavController(navController)
     }
 }
