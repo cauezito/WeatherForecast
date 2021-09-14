@@ -12,11 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.cauezito.simpleweatherforecast.R
 import br.com.cauezito.simpleweatherforecast.databinding.FragmentCurrentForecastBinding
 import br.com.cauezito.simpleweatherforecast.repository.ForecastRepository
+import br.com.cauezito.simpleweatherforecast.repository.Location
+import br.com.cauezito.simpleweatherforecast.repository.LocationRepository
 import br.com.cauezito.simpleweatherforecast.util.SharedPreferencesUtil
 
 class CurrentForecastFragment : Fragment() {
 
     private val forecastRepository = ForecastRepository()
+    private lateinit var locationRepository: LocationRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +58,15 @@ class CurrentForecastFragment : Fragment() {
             //update our list adapter
             dailyForestAdapter.submitList(forecastItems)
         }
-
         forecastRepository.weeklyForecast.observe(requireActivity(), weeklyForecastObsever)
-        forecastRepository.loadForecast(zipcode)
+
+        locationRepository = LocationRepository(requireContext())
+        val savedLocationObserver = Observer<Location> { savedLocation ->
+            when (savedLocation) {
+                is Location.Zipcode -> forecastRepository.loadForecast(savedLocation.zipcode)
+            }
+        }
+        locationRepository.savedLocation.observe(viewLifecycleOwner, savedLocationObserver)
 
         return binding.root
     }
