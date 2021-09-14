@@ -3,20 +3,30 @@ package br.com.cauezito.simpleweatherforecast.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.cauezito.simpleweatherforecast.weather.DailyForecast
+import java.util.*
 import kotlin.random.Random
 
 class ForecastRepository {
+    private val _currentForecast = MutableLiveData<DailyForecast>()
+    val currentForecast : LiveData<DailyForecast> = _currentForecast
+
     //is private because only the repository can change it
     private val _weeklyForecast = MutableLiveData<List<DailyForecast>>()
     val weeklyForecast: LiveData<List<DailyForecast>> = _weeklyForecast;
 
-    fun loadForecast(zipcode : String?){
+    fun loadWeeklyForecast(zipcode : String?){
         val randomValues = List(50){ Random.nextFloat().rem(100) * 100 }
         val forecastItems = randomValues.map { temp ->
             DailyForecast(temp, getTemperatureDescription(temp))
         }
 
         _weeklyForecast.value = forecastItems
+    }
+
+    fun loadCurrentForecast(zipcode : String?){
+        val randomTemp = Random.nextFloat().rem(100) * 100
+        val forecast = DailyForecast(randomTemp, getTemperatureDescription(randomTemp))
+        _currentForecast.value = forecast
     }
 
     private fun getTemperatureDescription(temp : Float) : String {

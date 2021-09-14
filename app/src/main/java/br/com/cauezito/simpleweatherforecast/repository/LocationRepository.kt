@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.cauezito.simpleweatherforecast.util.SharedPreferencesUtil
 
-
 sealed class Location {
     data class Zipcode(val zipcode: String) : Location()
 }
@@ -15,18 +14,18 @@ private const val SP_ZIPCODE = "SP_ZIPCODE"
 class LocationRepository(context: Context) {
     private val preferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
 
+    private val _savedLocation: MutableLiveData<Location> = MutableLiveData()
+    val savedLocation: LiveData<Location> = _savedLocation
+
     init {
         preferences.registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
             if (key != SP_ZIPCODE) return@registerOnSharedPreferenceChangeListener
 
-          broadcastSavedZipcode()
+            broadcastSavedZipcode()
         }
 
         broadcastSavedZipcode()
     }
-
-    private val _savedLocation: MutableLiveData<Location> = MutableLiveData()
-    val savedLocation: LiveData<Location> = _savedLocation
 
     fun saveLocation(location: Location){
         when (location){

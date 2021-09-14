@@ -53,17 +53,16 @@ class CurrentForecastFragment : Fragment() {
         forecastList.layoutManager = LinearLayoutManager(requireContext())
         forecastList.adapter = dailyForestAdapter
 
-        //observer will be updated anytime our live data changes in the repository
-        val weeklyForecastObsever = Observer<List<DailyForecast>> { forecastItems ->
-            //update our list adapter
-            dailyForestAdapter.submitList(forecastItems)
+        val currentForecastObserver = Observer<DailyForecast> { forecastItem ->
+            // update our list adapter
+            dailyForestAdapter.submitList(listOf(forecastItem))
         }
-        forecastRepository.weeklyForecast.observe(requireActivity(), weeklyForecastObsever)
+        forecastRepository.currentForecast.observe(viewLifecycleOwner, currentForecastObserver)
 
         locationRepository = LocationRepository(requireContext())
         val savedLocationObserver = Observer<Location> { savedLocation ->
             when (savedLocation) {
-                is Location.Zipcode -> forecastRepository.loadForecast(savedLocation.zipcode)
+                is Location.Zipcode -> forecastRepository.loadCurrentForecast(savedLocation.zipcode)
             }
         }
         locationRepository.savedLocation.observe(viewLifecycleOwner, savedLocationObserver)
