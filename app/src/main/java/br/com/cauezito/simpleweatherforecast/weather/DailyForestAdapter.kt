@@ -3,6 +3,7 @@ package br.com.cauezito.simpleweatherforecast.weather
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -11,6 +12,7 @@ import br.com.cauezito.simpleweatherforecast.R
 import br.com.cauezito.simpleweatherforecast.api.DailyForecast
 import br.com.cauezito.simpleweatherforecast.util.ForecastUtil
 import br.com.cauezito.simpleweatherforecast.util.SharedPreferencesUtil
+import coil.load
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,12 +22,17 @@ class DailyForecastViewHolder(view : View, private val sharedPreferencesUtil: Sh
     private val tvTemp : TextView = view.findViewById<TextView>(R.id.tvTemp)
     private val tvDescription : TextView = view.findViewById<TextView>(R.id.tvDescription)
     private val dateText : TextView = view.findViewById<TextView>(R.id.tvDate)
+    private val ivIcon : ImageView = view.findViewById<ImageView>(R.id.ivIcon)
 
 
     fun bind(dailyForecast: DailyForecast){
+        val weather = dailyForecast.weather[0]
+
         tvTemp.text = ForecastUtil.formatForecastForShow(dailyForecast.temp.max, sharedPreferencesUtil.getTemperatureDisplay())
-        tvDescription.text = dailyForecast.weather[0].description
+        tvDescription.text = weather.description
         dateText.text = DATE_FORMAT.format(Date(dailyForecast.date * 1000))
+
+        ivIcon.load("http://openweathermap.org/img/wn/${weather.icon}@2x.png")
     }
 }
 
