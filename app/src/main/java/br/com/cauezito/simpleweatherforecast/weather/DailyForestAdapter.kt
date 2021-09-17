@@ -8,16 +8,24 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.cauezito.simpleweatherforecast.R
+import br.com.cauezito.simpleweatherforecast.api.DailyForecast
 import br.com.cauezito.simpleweatherforecast.util.ForecastUtil
 import br.com.cauezito.simpleweatherforecast.util.SharedPreferencesUtil
+import java.text.SimpleDateFormat
+import java.util.*
+
+private val DATE_FORMAT = SimpleDateFormat("dd/MM/yyy")
 
 class DailyForecastViewHolder(view : View, private val sharedPreferencesUtil: SharedPreferencesUtil) : RecyclerView.ViewHolder(view) {
     private val tvTemp : TextView = view.findViewById<TextView>(R.id.tvTemp)
     private val tvDescription : TextView = view.findViewById<TextView>(R.id.tvDescription)
+    private val dateText : TextView = view.findViewById<TextView>(R.id.tvDate)
+
 
     fun bind(dailyForecast: DailyForecast){
-        tvTemp.text = ForecastUtil.formatForecastForShow(dailyForecast.temp, sharedPreferencesUtil.getTemperatureDisplay())
-        tvDescription.text = dailyForecast.description
+        tvTemp.text = ForecastUtil.formatForecastForShow(dailyForecast.temp.max, sharedPreferencesUtil.getTemperatureDisplay())
+        tvDescription.text = dailyForecast.weather[0].description
+        dateText.text = DATE_FORMAT.format(Date(dailyForecast.date * 1000))
     }
 }
 

@@ -10,6 +10,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.cauezito.simpleweatherforecast.R
+import br.com.cauezito.simpleweatherforecast.api.DailyForecast
+import br.com.cauezito.simpleweatherforecast.api.WeeklyForecast
 import br.com.cauezito.simpleweatherforecast.databinding.FragmentWeeklyForecastBinding
 import br.com.cauezito.simpleweatherforecast.repository.ForecastRepository
 import br.com.cauezito.simpleweatherforecast.repository.Location
@@ -49,12 +51,12 @@ class WeeklyForecastFragment : Fragment() {
         forecastList.adapter = dailyForestAdapter
 
         //observer will be updated anytime our live data changes in the repository
-        val weeklyForecastObsever = Observer<List<DailyForecast>> { forecastItems ->
+        val weeklyForecastObsever = Observer<WeeklyForecast> { weeklyForecast ->
             //update our list adapter
-            dailyForestAdapter.submitList(forecastItems)
+            dailyForestAdapter.submitList(weeklyForecast.daily)
         }
 
-        forecastRepository.weeklyForecast.observe(requireActivity(), weeklyForecastObsever)
+        forecastRepository.weeklyForecast.observe(viewLifecycleOwner, weeklyForecastObsever)
 
         locationRepository = LocationRepository(requireContext())
         val savedLocationObserver = Observer<Location> { savedLocation ->
@@ -68,7 +70,9 @@ class WeeklyForecastFragment : Fragment() {
     }
 
     fun showForecastDetails(forecast : DailyForecast){
-        val action = WeeklyForecastFragmentDirections.actionWeeklyForecastFragmentToForecastDetailsFragment2(forecast.temp, forecast.description)
+        val temp = forecast.temp.max
+        val description = forecast.weather[0].description
+        val action = WeeklyForecastFragmentDirections.actionWeeklyForecastFragmentToForecastDetailsFragment2(temp, description)
         findNavController().navigate(action)
     }
 
