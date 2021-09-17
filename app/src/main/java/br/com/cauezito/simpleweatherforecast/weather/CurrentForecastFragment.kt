@@ -10,11 +10,14 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.cauezito.simpleweatherforecast.R
+import br.com.cauezito.simpleweatherforecast.api.CurrentWeather
 import br.com.cauezito.simpleweatherforecast.databinding.FragmentCurrentForecastBinding
 import br.com.cauezito.simpleweatherforecast.repository.ForecastRepository
 import br.com.cauezito.simpleweatherforecast.repository.Location
 import br.com.cauezito.simpleweatherforecast.repository.LocationRepository
+import br.com.cauezito.simpleweatherforecast.util.ForecastUtil
 import br.com.cauezito.simpleweatherforecast.util.SharedPreferencesUtil
+import br.com.cauezito.simpleweatherforecast.util.TemperatureDisplaySetting
 
 class CurrentForecastFragment : Fragment() {
 
@@ -45,19 +48,15 @@ class CurrentForecastFragment : Fragment() {
             showLocationEntry()
         }
 
-        val forecastList = binding.rvForecastList
-        val dailyForestAdapter = DailyForestAdapter(SharedPreferencesUtil(requireContext())){ dailyForecast ->
-            showForecastDetails(dailyForecast)
+        val locationName = binding.tvLocation
+        val temperature = binding.tvTemperature
+
+        val currentWeatherObserver = Observer<CurrentWeather> { weather ->
+           locationName.text = weather.name
+            temperature.text = ForecastUtil.formatForecastForShow(weather.forecast.temp, TemperatureDisplaySetting.Celsius)
         }
 
-        forecastList.layoutManager = LinearLayoutManager(requireContext())
-        forecastList.adapter = dailyForestAdapter
-
-        val currentForecastObserver = Observer<DailyForecast> { forecastItem ->
-            // update our list adapter
-            dailyForestAdapter.submitList(listOf(forecastItem))
-        }
-        forecastRepository.currentForecast.observe(viewLifecycleOwner, currentForecastObserver)
+        forecastRepository.currentWeather.observe(viewLifecycleOwner, currentWeatherObserver)
 
         locationRepository = LocationRepository(requireContext())
         val savedLocationObserver = Observer<Location> { savedLocation ->

@@ -1,14 +1,22 @@
 package br.com.cauezito.simpleweatherforecast.repository
 
+import android.os.Build
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import br.com.cauezito.simpleweatherforecast.BuildConfig
+import br.com.cauezito.simpleweatherforecast.api.CurrentWeather
+import br.com.cauezito.simpleweatherforecast.api.createOpenWeatherMapService
 import br.com.cauezito.simpleweatherforecast.weather.DailyForecast
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 import kotlin.random.Random
 
 class ForecastRepository {
-    private val _currentForecast = MutableLiveData<DailyForecast>()
-    val currentForecast : LiveData<DailyForecast> = _currentForecast
+    private val _currentWeather = MutableLiveData<CurrentWeather>()
+    val currentWeather : LiveData<CurrentWeather> = _currentWeather
 
     //is private because only the repository can change it
     private val _weeklyForecast = MutableLiveData<List<DailyForecast>>()
@@ -23,10 +31,18 @@ class ForecastRepository {
         _weeklyForecast.value = forecastItems
     }
 
-    fun loadCurrentForecast(zipcode : String?){
-        val randomTemp = Random.nextFloat().rem(100) * 100
-        val forecast = DailyForecast(randomTemp, getTemperatureDescription(randomTemp))
-        _currentForecast.value = forecast
+    fun loadCurrentForecast(zipcode : String){
+        val call = createOpenWeatherMapService().getCurrentWeatherByZipcode(zipcode, "metric", BuildConfig.OPEN_WEATHER_API_KEY)
+        call.enqueue(object : Callback<CurrentWeather>{
+            override fun onResponse(call: Call<CurrentWeather>, response: Response<CurrentWeather>) {
+                val weatherResponse = response.body()
+                if (weatherResponse != null) _currentWeather.value = weatherResponse
+            }
+
+            override fun onFailure(call: Call<CurrentWeather>, t: Throwable) {
+                Log.e("api", "onFailure")
+            }
+        })
     }
 
     private fun getTemperatureDescription(temp : Float) : String {

@@ -29,7 +29,8 @@ class LocationEntryFragment : Fragment() {
 
         binding.btEnter.setOnClickListener{view ->
             val zipCode = binding.etZipcode.text.toString()
-            if (zipCode.length <= 5) Toast.makeText(context, "Invalid!", Toast.LENGTH_SHORT).show()
+
+            if (zipCode.length < 5) Toast.makeText(context, "Invalid!", Toast.LENGTH_SHORT).show()
             else {
                 locationRepository.saveLocation(Location.Zipcode(zipCode))
                 findNavController().navigateUp()
