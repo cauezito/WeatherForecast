@@ -54,11 +54,13 @@ class CurrentForecastFragment : Fragment() {
         val locationName = binding.tvLocation
         val temperature = binding.tvTemperature
         val emptyText = binding.tvEmpty
+        val progressbar = binding.pbLoading
 
         val currentWeatherObserver = Observer<CurrentWeather> { weather ->
             emptyText.visibility = View.GONE
             locationName.visibility = View.VISIBLE
             temperature.visibility = View.VISIBLE
+            progressbar.visibility = View.GONE
 
             locationName.text = weather.name
             temperature.text = ForecastUtil.formatForecastForShow(
@@ -72,7 +74,10 @@ class CurrentForecastFragment : Fragment() {
         locationRepository = LocationRepository(requireContext())
         val savedLocationObserver = Observer<Location> { savedLocation ->
             when (savedLocation) {
-                is Location.Zipcode -> forecastRepository.loadCurrentForecast(savedLocation.zipcode)
+                is Location.Zipcode -> {
+                    progressbar.visibility = View.VISIBLE
+                    forecastRepository.loadCurrentForecast(savedLocation.zipcode)
+                }
             }
         }
         locationRepository.savedLocation.observe(viewLifecycleOwner, savedLocationObserver)
