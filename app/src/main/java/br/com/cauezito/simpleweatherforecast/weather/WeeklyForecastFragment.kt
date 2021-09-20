@@ -31,6 +31,7 @@ class WeeklyForecastFragment : Fragment() {
             R.layout.fragment_weekly_forecast, container, false)
 
         val fabLocationEntryButton = binding.fabLocationEntryButton
+        val pbLoading = binding.pbLoading
 
         var zipcode : String? = ""
 
@@ -52,6 +53,7 @@ class WeeklyForecastFragment : Fragment() {
 
         //observer will be updated anytime our live data changes in the repository
         val weeklyForecastObsever = Observer<WeeklyForecast> { weeklyForecast ->
+            pbLoading.visibility = View.GONE
             //update our list adapter
             dailyForestAdapter.submitList(weeklyForecast.daily)
         }
@@ -61,7 +63,10 @@ class WeeklyForecastFragment : Fragment() {
         locationRepository = LocationRepository(requireContext())
         val savedLocationObserver = Observer<Location> { savedLocation ->
             when (savedLocation) {
-                is Location.Zipcode -> forecastRepository.loadWeeklyForecast(savedLocation.zipcode)
+                is Location.Zipcode -> {
+                    pbLoading.visibility = View.VISIBLE
+                    forecastRepository.loadWeeklyForecast(savedLocation.zipcode)
+                }
             }
         }
         locationRepository.savedLocation.observe(viewLifecycleOwner, savedLocationObserver)
