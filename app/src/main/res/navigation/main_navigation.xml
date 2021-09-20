@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/forecastDetailsFragment"
-        android:name="br.com.cauezito.simpleweatherforecast.weather.ForecastDetailsFragment"
+        android:name="br.com.cauezito.simpleweatherforecast.weather.details.ForecastDetailsFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_forecast_details">
         <argument
