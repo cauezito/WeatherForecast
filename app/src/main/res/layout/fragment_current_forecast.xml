@@ -13,11 +13,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:text="São Paulo"
             android:gravity="center"
-            android:textStyle="bold"
+            android:text="São Paulo"
             android:textColor="#877E7E"
             android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.437"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,13 +28,14 @@
             android:id="@+id/tvTemperature"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="22ºC"
             android:gravity="center"
+            android:text="22ºC"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textSize="40sp"
-            app:layout_constraintTop_toBottomOf="@id/tvLocation"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/tvLocation" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabLocationEntryButton"
@@ -46,6 +48,21 @@
             android:src="@android:drawable/ic_menu_search"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/tvEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter zipcode to see current weather"
+            android:textColor="#C14141"
+            android:textSize="20sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.19999999" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

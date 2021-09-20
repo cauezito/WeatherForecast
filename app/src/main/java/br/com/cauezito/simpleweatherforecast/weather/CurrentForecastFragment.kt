@@ -35,9 +35,11 @@ class CurrentForecastFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentCurrentForecastBinding = DataBindingUtil.inflate(inflater,
-            R.layout.fragment_current_forecast, container, false)
-        var zipcode : String? = ""
+        val binding: FragmentCurrentForecastBinding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_current_forecast, container, false
+        )
+        var zipcode: String? = ""
 
         arguments?.let {
             zipcode = it.getString(KEY_ZIPCODE) as String
@@ -51,10 +53,18 @@ class CurrentForecastFragment : Fragment() {
 
         val locationName = binding.tvLocation
         val temperature = binding.tvTemperature
+        val emptyText = binding.tvEmpty
 
         val currentWeatherObserver = Observer<CurrentWeather> { weather ->
-           locationName.text = weather.name
-            temperature.text = ForecastUtil.formatForecastForShow(weather.forecast.temp, TemperatureDisplaySetting.Celsius)
+            emptyText.visibility = View.GONE
+            locationName.visibility = View.VISIBLE
+            temperature.visibility = View.VISIBLE
+
+            locationName.text = weather.name
+            temperature.text = ForecastUtil.formatForecastForShow(
+                weather.forecast.temp,
+                TemperatureDisplaySetting.Celsius
+            )
         }
 
         forecastRepository.currentWeather.observe(viewLifecycleOwner, currentWeatherObserver)
@@ -70,15 +80,17 @@ class CurrentForecastFragment : Fragment() {
         return binding.root
     }
 
-    fun showLocationEntry(){
-        val action = CurrentForecastFragmentDirections.actionCurrentForecastFragmentToLocationEntryFragment()
+    fun showLocationEntry() {
+        val action =
+            CurrentForecastFragmentDirections.actionCurrentForecastFragmentToLocationEntryFragment()
         findNavController().navigate(action)
     }
 
     companion object {
         const val KEY_ZIPCODE = "KEY_ZIP_CODE"
+
         @JvmStatic // if your Kotlin code is called from Java, it makes sense to add the annotation
-        fun newInstance(zipcode : String) =
+        fun newInstance(zipcode: String) =
             CurrentForecastFragment().apply {
                 arguments = Bundle().apply {
                     arguments?.putString(KEY_ZIPCODE, zipcode)
