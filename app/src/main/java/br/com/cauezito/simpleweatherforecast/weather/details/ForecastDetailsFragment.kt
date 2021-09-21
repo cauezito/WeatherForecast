@@ -37,7 +37,7 @@ class ForecastDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewStateObserver = Observer<ForecastDetailsViewState> {
-            binding.tvTemperature.text =  ForecastUtil.formatForecastForShow(it.temp, SharedPreferencesUtil(requireContext()).getTemperatureDisplay())
+      //      binding.tvTemperature.text =  ForecastUtil.formatForecastForShow(it.temp, SharedPreferencesUtil(requireContext()).getTemperatureDisplay())
             binding.tvDetail.text = it.description
             binding.ivIcon.load("http://openweathermap.org/img/wn/${args.icon}@2x.png")
         }

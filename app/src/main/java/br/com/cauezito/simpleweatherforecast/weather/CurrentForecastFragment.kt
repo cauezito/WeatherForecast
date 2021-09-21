@@ -16,17 +16,13 @@ import br.com.cauezito.simpleweatherforecast.databinding.FragmentCurrentForecast
 import br.com.cauezito.simpleweatherforecast.repository.ForecastRepository
 import br.com.cauezito.simpleweatherforecast.repository.Location
 import br.com.cauezito.simpleweatherforecast.repository.LocationRepository
+import br.com.cauezito.simpleweatherforecast.util.ForecastUtil
+import br.com.cauezito.simpleweatherforecast.util.TemperatureDisplaySetting
 
 class CurrentForecastFragment : Fragment() {
 
     private val forecastRepository = ForecastRepository()
     private lateinit var locationRepository: LocationRepository
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,36 +38,30 @@ class CurrentForecastFragment : Fragment() {
             zipcode = it.getString(KEY_ZIPCODE) as String
         }
 
-        /* val fabLocationEntryButton = binding.fabLocationEntryButton
-
-         fabLocationEntryButton.setOnClickListener {
-             showLocationEntry()
-         }*/
-
-        /* val locationName = binding.tvLocation
-         val temperature = binding.tvTemperature
-         val emptyText = binding.tvEmpty
-         val progressbar = binding.pbLoading*/
-
+        val llWeatherInfo = binding.llWeatherInfo
+        val progressbar = binding.pbLoading
         val temperature = binding.tvTemperature
         val location = binding.tvLocation
         val weatherDescription = binding.tvWeatherDescription
+        val windSpeed = binding.tvWindSpeed
+        val humidity = binding.tvHumidity
+        val precipitation = binding.tvPrecipitation
+        val feelsLike = binding.tvFeelsLike
 
         val currentWeatherObserver = Observer<ApiWeather> { weather ->
-            temperature.text = weather.current.temperature.toString()
+            llWeatherInfo.visibility = View.VISIBLE
+            progressbar.visibility = View.GONE
+
+            temperature.text = ForecastUtil.formatForecastForShow(
+                weather.current.temperature,
+                TemperatureDisplaySetting.Celsius
+            )
             location.text = weather.location.name
             weatherDescription.text = weather.current.weatherDescriptions[0]
-
-            /*  emptyText.visibility = View.GONE
-              locationName.visibility = View.VISIBLE
-              temperature.visibility = View.VISIBLE
-              progressbar.visibility = View.GONE
-
-              locationName.text = weather.name
-              temperature.text = ForecastUtil.formatForecastForShow(
-                  weather.forecast.temp,
-                  TemperatureDisplaySetting.Celsius
-              )*/
+            windSpeed.text = weather.current.windSpeed.toString()
+            humidity.text = weather.current.humidity.toString()
+            precipitation.text = weather.current.precipitation.toString()
+            feelsLike.text = weather.current.feelslike.toString()
         }
 
         forecastRepository.currentWeather.observe(viewLifecycleOwner, currentWeatherObserver)
@@ -80,7 +70,9 @@ class CurrentForecastFragment : Fragment() {
         val savedLocationObserver = Observer<Location> { savedLocation ->
             when (savedLocation) {
                 is Location.Zipcode -> {
-                    // progressbar.visibility = View.VISIBLE
+                    progressbar.visibility = View.VISIBLE
+                    llWeatherInfo.visibility = View.GONE
+
                     forecastRepository.loadCurrentForecast(savedLocation.zipcode)
                 }
             }

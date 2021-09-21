@@ -8,14 +8,14 @@ import br.com.cauezito.simpleweatherforecast.R
 
 class ForecastUtil {
     companion object {
-        fun formatForecastForShow(temperature: Float, temperatureDisplaySetting: TemperatureDisplaySetting): String {
+        fun formatForecastForShow(
+            temperature: Double,
+            temperatureDisplaySetting: TemperatureDisplaySetting
+        ): String {
 
-            return when(temperatureDisplaySetting) {
-                TemperatureDisplaySetting.Fahrenheit -> String.format("%.2fºF", temperature)
-                TemperatureDisplaySetting.Celsius -> {
-                    val temp = (temperature - 32f) * (5f/9f)
-                    String.format("%.2fºC", temp)
-                }
+            return when (temperatureDisplaySetting) {
+                TemperatureDisplaySetting.Fahrenheit -> String.format("%.0f", temperature)
+                TemperatureDisplaySetting.Celsius -> String.format("%.0f", temperature)
             }
         }
 
