@@ -11,20 +11,20 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 
-
-const val BASE_URL = "http://api.openweathermap.org"
+const val BASE_API_URL = "http://api.weatherstack.com/"
 
 fun createOpenWeatherMapService(): OpenWeatherMapService {
     val httpClient = OkHttpClient.Builder()
 
     httpClient.addInterceptor { chain ->
         val url = chain.request().url().newBuilder()
-            .addQueryParameter("appid", BuildConfig.OPEN_WEATHER_API_KEY).build()
+            .addQueryParameter("access_key", BuildConfig.API_KEY).build()
         val request = chain.request().newBuilder().url(url).build()
         chain.proceed(request)
     }
 
-    return Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(MoshiConverterFactory.create())
+    return Retrofit.Builder().baseUrl(BASE_API_URL)
+        .addConverterFactory(MoshiConverterFactory.create())
         .client(httpClient.build())
         .build()
         .create(OpenWeatherMapService::class.java)
@@ -32,18 +32,8 @@ fun createOpenWeatherMapService(): OpenWeatherMapService {
 
 interface OpenWeatherMapService {
 
-    @GET("/data/2.5/weather")
+    @GET("current")
     fun getCurrentWeatherByZipcode(
-        @Query("zip") zipCode: String,
-        @Query("units") units: String
-    ): Call<CurrentWeather>
-
-
-    @GET("/data/2.5/onecall")
-    fun getSevenDayForecast(
-        @Query("lat") lat: Float,
-        @Query("lon") long: Float,
-        @Query("exclude") exclude: String,
-        @Query("units") units: String
-    ): Call<WeeklyForecast>
+        @Query("query") location: String, @Query("unit") unit: String = "m"
+    ): Call<ApiWeather>
 }
