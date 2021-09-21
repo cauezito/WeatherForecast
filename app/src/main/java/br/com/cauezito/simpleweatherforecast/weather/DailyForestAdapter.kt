@@ -28,7 +28,7 @@ class DailyForecastViewHolder(view : View, private val sharedPreferencesUtil: Sh
     fun bind(dailyForecast: DailyForecast){
         val weather = dailyForecast.weather[0]
 
-        tvTemp.text = ForecastUtil.formatForecastForShow(dailyForecast.temp.max, sharedPreferencesUtil.getTemperatureDisplay())
+      //  tvTemp.text = ForecastUtil.formatForecastForShow(dailyForecast.temp.max, sharedPreferencesUtil.getTemperatureDisplay())
         tvDescription.text = weather.description
         dateText.text = DATE_FORMAT.format(Date(dailyForecast.date * 1000))
 

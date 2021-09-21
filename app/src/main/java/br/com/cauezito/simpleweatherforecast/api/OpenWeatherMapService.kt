@@ -10,18 +10,24 @@ import retrofit2.http.Query
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
 
 const val BASE_API_URL = "http://api.weatherstack.com/"
 
 fun createOpenWeatherMapService(): OpenWeatherMapService {
+    val logging = HttpLoggingInterceptor()
+    logging.level = HttpLoggingInterceptor.Level.BODY
+
     val httpClient = OkHttpClient.Builder()
 
     httpClient.addInterceptor { chain ->
-        val url = chain.request().url().newBuilder()
+        val url = chain.request().url.newBuilder()
             .addQueryParameter("access_key", BuildConfig.API_KEY).build()
         val request = chain.request().newBuilder().url(url).build()
         chain.proceed(request)
     }
+
+    httpClient.addInterceptor(logging)
 
     return Retrofit.Builder().baseUrl(BASE_API_URL)
         .addConverterFactory(MoshiConverterFactory.create())
