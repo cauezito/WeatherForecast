@@ -20,7 +20,7 @@ class ForecastRepository {
     val weeklyForecast: LiveData<WeeklyForecast> = _weeklyForecast;
 
     fun loadWeeklyForecast(zipcode : String){
-        val call = createOpenWeatherMapService().getCurrentWeatherByZipcode(zipcode, "metric", BuildConfig.OPEN_WEATHER_API_KEY)
+        val call = createOpenWeatherMapService().getCurrentWeatherByZipcode(zipcode, "metric")
         call.enqueue(object : Callback<CurrentWeather>{
             override fun onResponse(call: Call<CurrentWeather>, response: Response<CurrentWeather>) {
                 val weatherResponse = response.body()
@@ -30,8 +30,8 @@ class ForecastRepository {
                         lat = weatherResponse.coordinates.lat,
                         long = weatherResponse.coordinates.lon,
                         exclude = "current,minutely,hourly",
-                        units = "metric",
-                        apiKey = BuildConfig.OPEN_WEATHER_API_KEY)
+                        units = "metric"
+                    )
 
                     forecastCall.enqueue(object: Callback<WeeklyForecast>{
                         override fun onResponse(call: Call<WeeklyForecast>, response: Response<WeeklyForecast>) {
@@ -54,7 +54,7 @@ class ForecastRepository {
     }
 
     fun loadCurrentForecast(zipcode : String){
-        val call = createOpenWeatherMapService().getCurrentWeatherByZipcode(zipcode, "metric", BuildConfig.OPEN_WEATHER_API_KEY)
+        val call = createOpenWeatherMapService().getCurrentWeatherByZipcode(zipcode, "metric")
         call.enqueue(object : Callback<CurrentWeather>{
             override fun onResponse(call: Call<CurrentWeather>, response: Response<CurrentWeather>) {
                 val weatherResponse = response.body()
@@ -65,17 +65,5 @@ class ForecastRepository {
                 Log.e("api", "Error get current forecast")
             }
         })
-    }
-
-    private fun getTemperatureDescription(temp : Float) : String {
-        return when (temp) {
-            in 32f.rangeTo(55f) -> "Colder than I would prefer"
-            in 55f.rangeTo(65f) -> "Getting better"
-            in 65f.rangeTo(80f) -> "That's the sweet spot!"
-            in 80f.rangeTo(90f) -> "Getting a little warm"
-            in 90f.rangeTo(100f) -> "Where's the A/C?"
-            in 100f.rangeTo(Float.MAX_VALUE) -> "What is this, Arizona?"
-            else -> "Does not compute"
-        }
     }
 }
