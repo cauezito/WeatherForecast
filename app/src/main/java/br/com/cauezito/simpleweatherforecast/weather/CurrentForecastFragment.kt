@@ -5,20 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.cauezito.simpleweatherforecast.R
+import br.com.cauezito.simpleweatherforecast.api.ApiWeather
 import br.com.cauezito.simpleweatherforecast.api.CurrentWeather
-import br.com.cauezito.simpleweatherforecast.api.DailyForecast
 import br.com.cauezito.simpleweatherforecast.databinding.FragmentCurrentForecastBinding
 import br.com.cauezito.simpleweatherforecast.repository.ForecastRepository
 import br.com.cauezito.simpleweatherforecast.repository.Location
 import br.com.cauezito.simpleweatherforecast.repository.LocationRepository
-import br.com.cauezito.simpleweatherforecast.util.ForecastUtil
-import br.com.cauezito.simpleweatherforecast.util.SharedPreferencesUtil
-import br.com.cauezito.simpleweatherforecast.util.TemperatureDisplaySetting
 
 class CurrentForecastFragment : Fragment() {
 
@@ -45,28 +42,36 @@ class CurrentForecastFragment : Fragment() {
             zipcode = it.getString(KEY_ZIPCODE) as String
         }
 
-        val fabLocationEntryButton = binding.fabLocationEntryButton
+        /* val fabLocationEntryButton = binding.fabLocationEntryButton
 
-        fabLocationEntryButton.setOnClickListener {
-            showLocationEntry()
-        }
+         fabLocationEntryButton.setOnClickListener {
+             showLocationEntry()
+         }*/
 
-        val locationName = binding.tvLocation
+        /* val locationName = binding.tvLocation
+         val temperature = binding.tvTemperature
+         val emptyText = binding.tvEmpty
+         val progressbar = binding.pbLoading*/
+
         val temperature = binding.tvTemperature
-        val emptyText = binding.tvEmpty
-        val progressbar = binding.pbLoading
+        val location = binding.tvLocation
+        val weatherDescription = binding.tvWeatherDescription
 
-        val currentWeatherObserver = Observer<CurrentWeather> { weather ->
-            emptyText.visibility = View.GONE
-            locationName.visibility = View.VISIBLE
-            temperature.visibility = View.VISIBLE
-            progressbar.visibility = View.GONE
+        val currentWeatherObserver = Observer<ApiWeather> { weather ->
+            temperature.text = weather.current.temperature.toString()
+            location.text = weather.location.name
+            weatherDescription.text = weather.current.weatherDescriptions[0]
 
-            locationName.text = weather.name
-            temperature.text = ForecastUtil.formatForecastForShow(
-                weather.forecast.temp,
-                TemperatureDisplaySetting.Celsius
-            )
+            /*  emptyText.visibility = View.GONE
+              locationName.visibility = View.VISIBLE
+              temperature.visibility = View.VISIBLE
+              progressbar.visibility = View.GONE
+
+              locationName.text = weather.name
+              temperature.text = ForecastUtil.formatForecastForShow(
+                  weather.forecast.temp,
+                  TemperatureDisplaySetting.Celsius
+              )*/
         }
 
         forecastRepository.currentWeather.observe(viewLifecycleOwner, currentWeatherObserver)
@@ -75,7 +80,7 @@ class CurrentForecastFragment : Fragment() {
         val savedLocationObserver = Observer<Location> { savedLocation ->
             when (savedLocation) {
                 is Location.Zipcode -> {
-                    progressbar.visibility = View.VISIBLE
+                    // progressbar.visibility = View.VISIBLE
                     forecastRepository.loadCurrentForecast(savedLocation.zipcode)
                 }
             }
