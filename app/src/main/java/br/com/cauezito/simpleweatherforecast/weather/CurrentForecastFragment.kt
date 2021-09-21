@@ -48,6 +48,11 @@ class CurrentForecastFragment : Fragment() {
         val precipitation = binding.tvPrecipitation
         val feelsLike = binding.tvFeelsLike
 
+        location.setOnClickListener(View.OnClickListener {
+            //Abrir dialog para inserção da localização
+            Toast.makeText(context, "teste", Toast.LENGTH_LONG).show()
+        })
+
         val currentWeatherObserver = Observer<ApiWeather> { weather ->
             llWeatherInfo.visibility = View.VISIBLE
             progressbar.visibility = View.GONE
