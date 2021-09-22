@@ -11,11 +11,11 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import br.com.cauezito.simpleweatherforecast.R
 import br.com.cauezito.simpleweatherforecast.api.ApiWeather
-import br.com.cauezito.simpleweatherforecast.api.CurrentWeather
 import br.com.cauezito.simpleweatherforecast.databinding.FragmentCurrentForecastBinding
 import br.com.cauezito.simpleweatherforecast.repository.ForecastRepository
 import br.com.cauezito.simpleweatherforecast.repository.Location
 import br.com.cauezito.simpleweatherforecast.repository.LocationRepository
+import br.com.cauezito.simpleweatherforecast.ui.CustomDialog
 import br.com.cauezito.simpleweatherforecast.util.ForecastUtil
 import br.com.cauezito.simpleweatherforecast.util.TemperatureDisplaySetting
 
@@ -48,18 +48,12 @@ class CurrentForecastFragment : Fragment() {
         val precipitation = binding.tvPrecipitation
         val feelsLike = binding.tvFeelsLike
 
-        location.setOnClickListener(View.OnClickListener {
-            //Abrir dialog para inserção da localização
-            Toast.makeText(context, "teste", Toast.LENGTH_LONG).show()
-        })
-
         val currentWeatherObserver = Observer<ApiWeather> { weather ->
             llWeatherInfo.visibility = View.VISIBLE
             progressbar.visibility = View.GONE
 
             temperature.text = ForecastUtil.formatForecastForShow(
-                weather.current.temperature,
-                TemperatureDisplaySetting.Celsius
+                weather.current.temperature, TemperatureDisplaySetting.Celsius
             )
             location.text = weather.location.name
             weatherDescription.text = weather.current.weatherDescriptions[0]
@@ -71,7 +65,6 @@ class CurrentForecastFragment : Fragment() {
 
         forecastRepository.currentWeather.observe(viewLifecycleOwner, currentWeatherObserver)
 
-        locationRepository = LocationRepository(requireContext())
         val savedLocationObserver = Observer<Location> { savedLocation ->
             when (savedLocation) {
                 is Location.Zipcode -> {
@@ -82,15 +75,22 @@ class CurrentForecastFragment : Fragment() {
                 }
             }
         }
+
+        locationRepository = LocationRepository(requireContext())
         locationRepository.savedLocation.observe(viewLifecycleOwner, savedLocationObserver)
 
-        return binding.root
-    }
+        location.setOnClickListener(View.OnClickListener {
+            //Abrir dialog para inserção da localização
+            //todo entender object:
+            val customDialog = CustomDialog(requireContext(), object : OnInsertLocation {
+                override fun setLocation(location: String) {
+                    locationRepository.saveLocation(Location.Zipcode(location))
+                }
+            })
+            customDialog.show()
+        })
 
-    fun showLocationEntry() {
-        val action =
-            CurrentForecastFragmentDirections.actionCurrentForecastFragmentToLocationEntryFragment()
-        findNavController().navigate(action)
+        return binding.root
     }
 
     companion object {
@@ -103,5 +103,9 @@ class CurrentForecastFragment : Fragment() {
                     arguments?.putString(KEY_ZIPCODE, zipcode)
                 }
             }
+    }
+
+    interface OnInsertLocation {
+        fun setLocation(location: String)
     }
 }

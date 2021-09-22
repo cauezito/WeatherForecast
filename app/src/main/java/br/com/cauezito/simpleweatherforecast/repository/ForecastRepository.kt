@@ -55,11 +55,13 @@ class ForecastRepository {
     }
 
     fun loadCurrentForecast(zipcode : String) {
-        val call = createOpenWeatherMapService().getCurrentWeatherByZipcode("São Paulo", "metric")
+        val call = createOpenWeatherMapService().getCurrentWeatherByZipcode(zipcode, "metric")
+
         call.enqueue(object : Callback<ApiWeather> {
             override fun onResponse(call: Call<ApiWeather>, response: Response<ApiWeather>) {
                 val weatherResponse: ApiWeather? = response.body()
-                if (weatherResponse != null) _currentWeather.value = weatherResponse
+                if (weatherResponse != null)
+                    _currentWeather.value = weatherResponse
             }
 
             override fun onFailure(call: Call<ApiWeather>, t: Throwable) {

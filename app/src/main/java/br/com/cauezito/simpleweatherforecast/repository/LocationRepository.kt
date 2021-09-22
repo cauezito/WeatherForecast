@@ -28,8 +28,12 @@ class LocationRepository(context: Context) {
     }
 
     fun saveLocation(location: Location){
-        when (location){
-            is Location.Zipcode -> preferences.edit().putString(SP_ZIPCODE, location.zipcode).apply()
+        when (location) {
+            is Location.Zipcode -> {
+                preferences.edit().putString(SP_ZIPCODE, location.zipcode).apply()
+
+                broadcastSavedZipcode()
+            }
         }
     }
 
