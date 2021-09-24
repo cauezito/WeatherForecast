@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
- <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-     <item name="colorPrimary">#22776E</item>
-     <item name="colorPrimaryDark">#0B6A61</item>
-     <item name="colorAccent">#3E988F</item>
- </style>
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">#22776E</item>
+        <item name="colorPrimaryDark">#0B6A61</item>
+        <item name="colorAccent">#3E988F</item>
+
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+    </style>
+
+    <style name="ShapeAppearance.App.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">0dp</item>
+    </style>
 
 
 </resources>

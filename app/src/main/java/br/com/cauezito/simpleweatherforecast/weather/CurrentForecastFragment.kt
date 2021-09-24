@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import br.com.cauezito.simpleweatherforecast.BaseActivity
@@ -16,11 +17,14 @@ import br.com.cauezito.simpleweatherforecast.repository.Location
 import br.com.cauezito.simpleweatherforecast.repository.LocationRepository
 import br.com.cauezito.simpleweatherforecast.util.ForecastUtil
 import br.com.cauezito.simpleweatherforecast.util.TemperatureDisplaySetting
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class CurrentForecastFragment : BaseActivity() {
 
     private val forecastRepository = ForecastRepository()
     private lateinit var locationRepository: LocationRepository
+    private lateinit var ivCity: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +49,8 @@ class CurrentForecastFragment : BaseActivity() {
         val humidity = binding.tvHumidity
         val precipitation = binding.tvPrecipitation
         val feelsLike = binding.tvFeelsLike
+        ivCity = binding.ivCity
+
 
         val currentWeatherObserver = Observer<ApiWeather> { weather ->
             llWeatherInfo.visibility = View.VISIBLE
@@ -78,26 +84,39 @@ class CurrentForecastFragment : BaseActivity() {
         locationRepository.savedLocation.observe(viewLifecycleOwner, savedLocationObserver)
 
         location.setOnClickListener(View.OnClickListener {
-            //Abrir dialog para inserção da localização
             //todo entender object:
-            openLocationModal();
+            openLocationModal(object : OnInsertLocation {
+                override fun setLocation(location: String) {
+                    locationRepository.saveLocation(Location.Zipcode(location))
+                }
+            });
         })
 
         return binding.root
     }
 
-    private fun openLocationModal() {
+    private fun openLocationModal(onInsertLocation: OnInsertLocation) {
         val view: View =
             LayoutInflater.from(context).inflate(R.layout.custom_location_card, null, true)
 
         val displayMetrics = this.resources.displayMetrics
-        var screenDp = (displayMetrics.heightPixels / 2) - 360
+        var screenDp = (displayMetrics.heightPixels / 2) - 290
+
+        val til = view.findViewById<TextInputLayout>(R.id.tilCity)
+        val tiet = view.findViewById<TextInputEditText>(R.id.tietCity)
+        val ivClose = view.findViewById<ImageView>(R.id.ivClose)
+
+        ivClose.setOnClickListener {
+            animateModalDown(view);
+        }
+
+        til.setEndIconOnClickListener {
+            onInsertLocation.setLocation(tiet.text.toString())
+            animateModalDown(view);
+        }
 
         animateModalUpWithMargin(object : ModalTaskListener(view) {
-            override fun onModalCancelled() {
-
-            }
-
+            override fun onModalCancelled() {}
         }, screenDp)
     }
 
