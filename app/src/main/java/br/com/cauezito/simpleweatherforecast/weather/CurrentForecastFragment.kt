@@ -44,6 +44,7 @@ class CurrentForecastFragment : BaseActivity() {
         val progressbar = binding.pbLoading
         val temperature = binding.tvTemperature
         val location = binding.tvLocation
+        val llCity = binding.llCity
         val weatherDescription = binding.tvWeatherDescription
         val windSpeed = binding.tvWindSpeed
         val humidity = binding.tvHumidity
@@ -83,7 +84,7 @@ class CurrentForecastFragment : BaseActivity() {
         locationRepository = LocationRepository(requireContext())
         locationRepository.savedLocation.observe(viewLifecycleOwner, savedLocationObserver)
 
-        location.setOnClickListener(View.OnClickListener {
+        llCity.setOnClickListener(View.OnClickListener {
             //todo entender object:
             openLocationModal(object : OnInsertLocation {
                 override fun setLocation(location: String) {
