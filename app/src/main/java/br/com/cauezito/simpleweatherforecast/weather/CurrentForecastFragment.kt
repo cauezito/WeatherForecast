@@ -1,25 +1,23 @@
 package br.com.cauezito.simpleweatherforecast.weather
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
+import br.com.cauezito.simpleweatherforecast.BaseActivity
+import br.com.cauezito.simpleweatherforecast.ModalTaskListener
 import br.com.cauezito.simpleweatherforecast.R
 import br.com.cauezito.simpleweatherforecast.api.ApiWeather
 import br.com.cauezito.simpleweatherforecast.databinding.FragmentCurrentForecastBinding
 import br.com.cauezito.simpleweatherforecast.repository.ForecastRepository
 import br.com.cauezito.simpleweatherforecast.repository.Location
 import br.com.cauezito.simpleweatherforecast.repository.LocationRepository
-import br.com.cauezito.simpleweatherforecast.ui.CustomDialog
 import br.com.cauezito.simpleweatherforecast.util.ForecastUtil
 import br.com.cauezito.simpleweatherforecast.util.TemperatureDisplaySetting
 
-class CurrentForecastFragment : Fragment() {
+class CurrentForecastFragment : BaseActivity() {
 
     private val forecastRepository = ForecastRepository()
     private lateinit var locationRepository: LocationRepository
@@ -82,15 +80,25 @@ class CurrentForecastFragment : Fragment() {
         location.setOnClickListener(View.OnClickListener {
             //Abrir dialog para inserção da localização
             //todo entender object:
-            val customDialog = CustomDialog(requireContext(), object : OnInsertLocation {
-                override fun setLocation(location: String) {
-                    locationRepository.saveLocation(Location.Zipcode(location))
-                }
-            })
-            customDialog.show()
+            openLocationModal();
         })
 
         return binding.root
+    }
+
+    private fun openLocationModal() {
+        val view: View =
+            LayoutInflater.from(context).inflate(R.layout.custom_location_card, null, true)
+
+        val displayMetrics = this.resources.displayMetrics
+        var screenDp = (displayMetrics.heightPixels / 2) - 360
+
+        animateModalUpWithMargin(object : ModalTaskListener(view) {
+            override fun onModalCancelled() {
+
+            }
+
+        }, screenDp)
     }
 
     companion object {
