@@ -2,9 +2,9 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">#22776E</item>
-        <item name="colorPrimaryDark">#0B6A61</item>
-        <item name="colorAccent">#3E988F</item>
+        <item name="colorPrimary">#48426D</item>
+        <item name="colorPrimaryDark">#322749</item>
+        <item name="colorAccent">#706897</item>
 
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
     </style>
