@@ -87,7 +87,7 @@ open class BaseActivity : Fragment() {
             window?.decorView?.getWindowVisibleDisplayFrame(rectangle)
 
             val screenEnd = rectangle.bottom
-            val rootView = view.findViewById<ViewGroup>(R.id.content)
+            val rootView = window?.findViewById<ViewGroup>(android.R.id.content)
             val animatorUp = ObjectAnimator.ofFloat(view, "translationY", screenEnd.toFloat())
             val animatorAlphaOut = ObjectAnimator.ofFloat(viewTranslucent, "alpha", 0f)
             val set = AnimatorSet()
@@ -96,11 +96,12 @@ open class BaseActivity : Fragment() {
                 animatorAlphaOut,
                 animatorUp
             ) else set.playTogether(animatorUp)
+
             set.interpolator = AccelerateDecelerateInterpolator()
             set.addListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(animator: Animator) {}
                 override fun onAnimationEnd(animator: Animator) {
-                    rootView.removeView(view)
+                    rootView?.removeView(view)
                     view.visibility = View.GONE
                     viewTranslucent.isClickable = false
                 }
@@ -110,6 +111,19 @@ open class BaseActivity : Fragment() {
             })
 
             set.start()
+        }
+    }
+
+    open fun animateModalDown(view: View) {
+        if (upModals != null && !upModals.isEmpty()) {
+            var modalToAnimateDown: ModalTaskListener? = null
+            for (modalTaskListener in upModals) {
+                if (view === modalTaskListener.getView()) {
+                    modalToAnimateDown = modalTaskListener
+                    break
+                }
+            }
+            modalToAnimateDown?.let { animateModalDown(it) }
         }
     }
 }
