@@ -9,7 +9,7 @@ import br.com.cauezito.simpleweatherforecast.R
 class ForecastUtil {
     companion object {
         fun formatForecastForShow(
-            temperature: Double,
+            temperature: Double?,
             temperatureDisplaySetting: TemperatureDisplaySetting
         ): String {
 

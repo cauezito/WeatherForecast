@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import br.com.cauezito.simpleweatherforecast.BaseActivity
@@ -24,7 +25,6 @@ class CurrentForecastFragment : BaseActivity() {
 
     private val forecastRepository = ForecastRepository()
     private lateinit var locationRepository: LocationRepository
-    private lateinit var ivCity: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,32 +40,52 @@ class CurrentForecastFragment : BaseActivity() {
             zipcode = it.getString(KEY_ZIPCODE) as String
         }
 
-        val llWeatherInfo = binding.llWeatherInfo
+        val llWeatherInfo1 = binding.llWeatherInfo1
+        val llWeatherInfo2 = binding.llWeatherInfo2
         val progressbar = binding.pbLoading
         val temperature = binding.tvTemperature
         val location = binding.tvLocation
         val llCity = binding.llCity
+        val locationError = binding.tvLocationError
         val weatherDescription = binding.tvWeatherDescription
         val windSpeed = binding.tvWindSpeed
         val humidity = binding.tvHumidity
         val precipitation = binding.tvPrecipitation
         val feelsLike = binding.tvFeelsLike
-        ivCity = binding.ivCity
+        val llLocation = binding.llLocation
 
+        val currentWeatherObserver = Observer<ApiWeather> { apiWeather ->
+            if (apiWeather.current != null) {
+                llWeatherInfo1.visibility = View.VISIBLE
+                llWeatherInfo2.visibility = View.VISIBLE
+                locationError.visibility = View.GONE
 
-        val currentWeatherObserver = Observer<ApiWeather> { weather ->
-            llWeatherInfo.visibility = View.VISIBLE
+                temperature.text = ForecastUtil.formatForecastForShow(
+                    apiWeather?.current?.temperature,
+                    TemperatureDisplaySetting.Celsius
+                )
+                location.text = apiWeather.location.name
+                weatherDescription.text = apiWeather.current.weatherDescriptions.get(0)
+                windSpeed.text = apiWeather.current.windSpeed.toString()
+                humidity.text = apiWeather.current.humidity.toString()
+                precipitation.text = apiWeather.current.precipitation.toString()
+                feelsLike.text = apiWeather.current.feelslike.toString()
+            } else {
+                llWeatherInfo1.visibility = View.GONE
+                llWeatherInfo2.visibility = View.GONE
+
+                llLocation.visibility = View.VISIBLE
+                locationError.visibility = View.VISIBLE
+
+                location.text = "Inserir local"
+                Toast.makeText(
+                    activity,
+                    "Não foi possível recuperar a previsão. Você digitou o local correto?",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
             progressbar.visibility = View.GONE
-
-            temperature.text = ForecastUtil.formatForecastForShow(
-                weather.current.temperature, TemperatureDisplaySetting.Celsius
-            )
-            location.text = weather.location.name
-            weatherDescription.text = weather.current.weatherDescriptions[0]
-            windSpeed.text = weather.current.windSpeed.toString()
-            humidity.text = weather.current.humidity.toString()
-            precipitation.text = weather.current.precipitation.toString()
-            feelsLike.text = weather.current.feelslike.toString()
         }
 
         forecastRepository.currentWeather.observe(viewLifecycleOwner, currentWeatherObserver)
@@ -74,7 +94,8 @@ class CurrentForecastFragment : BaseActivity() {
             when (savedLocation) {
                 is Location.Zipcode -> {
                     progressbar.visibility = View.VISIBLE
-                    llWeatherInfo.visibility = View.GONE
+                    llWeatherInfo1.visibility = View.GONE
+                    llWeatherInfo2.visibility = View.GONE
 
                     forecastRepository.loadCurrentForecast(savedLocation.zipcode)
                 }
@@ -90,7 +111,7 @@ class CurrentForecastFragment : BaseActivity() {
                 override fun setLocation(location: String) {
                     locationRepository.saveLocation(Location.Zipcode(location))
                 }
-            });
+            })
         })
 
         return binding.root
@@ -108,12 +129,12 @@ class CurrentForecastFragment : BaseActivity() {
         val ivClose = view.findViewById<ImageView>(R.id.ivClose)
 
         ivClose.setOnClickListener {
-            animateModalDown(view);
+            animateModalDown(view)
         }
 
         til.setEndIconOnClickListener {
             onInsertLocation.setLocation(tiet.text.toString())
-            animateModalDown(view);
+            animateModalDown(view)
         }
 
         animateModalUpWithMargin(object : ModalTaskListener(view) {

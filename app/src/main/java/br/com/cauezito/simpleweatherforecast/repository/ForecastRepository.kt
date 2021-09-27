@@ -1,24 +1,22 @@
 package br.com.cauezito.simpleweatherforecast.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import br.com.cauezito.simpleweatherforecast.BuildConfig
 import br.com.cauezito.simpleweatherforecast.api.ApiWeather
-import br.com.cauezito.simpleweatherforecast.api.CurrentWeather
+import br.com.cauezito.simpleweatherforecast.api.DefaultCallback
 import br.com.cauezito.simpleweatherforecast.api.WeeklyForecast
 import br.com.cauezito.simpleweatherforecast.api.createOpenWeatherMapService
-import retrofit2.Call
-import retrofit2.Callback
+import okhttp3.ResponseBody
 import retrofit2.Response
 
 class ForecastRepository {
+
     private val _currentWeather = MutableLiveData<ApiWeather>()
     val currentWeather: LiveData<ApiWeather> = _currentWeather
 
     //is private because only the repository can change it
     private val _weeklyForecast = MutableLiveData<WeeklyForecast>()
-    val weeklyForecast: LiveData<WeeklyForecast> = _weeklyForecast;
+    val weeklyForecast: LiveData<WeeklyForecast> = _weeklyForecast
 
     fun loadWeeklyForecast(zipcode: String) {
         /*   val call = createOpenWeatherMapService().getCurrentWeatherByZipcode(zipcode, "metric")
@@ -54,18 +52,16 @@ class ForecastRepository {
            })*/
     }
 
-    fun loadCurrentForecast(zipcode : String) {
+    fun loadCurrentForecast(zipcode: String) {
         val call = createOpenWeatherMapService().getCurrentWeatherByZipcode(zipcode, "metric")
 
-        call.enqueue(object : Callback<ApiWeather> {
-            override fun onResponse(call: Call<ApiWeather>, response: Response<ApiWeather>) {
-                val weatherResponse: ApiWeather? = response.body()
-                if (weatherResponse != null)
-                    _currentWeather.value = weatherResponse
+        call.enqueue(object : DefaultCallback<ApiWeather>() {
+            override fun onSuccess(response: Response<ApiWeather>, code: Int) {
+                _currentWeather.value = response.body()
             }
 
-            override fun onFailure(call: Call<ApiWeather>, t: Throwable) {
-                Log.e("api", "Error get current forecast")
+            override fun onError(body: ResponseBody?, code: Int, t: Throwable?) {
+                _currentWeather.value = null
             }
         })
     }
