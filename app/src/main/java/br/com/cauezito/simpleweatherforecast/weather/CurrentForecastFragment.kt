@@ -23,6 +23,7 @@ class CurrentForecastFragment : BaseActivity() {
 
     private val forecastRepository = ForecastRepository()
     private lateinit var locationRepository: LocationRepository
+    private lateinit var zipcode: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,34 +33,22 @@ class CurrentForecastFragment : BaseActivity() {
             inflater,
             R.layout.fragment_current_forecast, container, false
         )
-        var zipcode: String? = ""
 
         arguments?.let {
             zipcode = it.getString(KEY_ZIPCODE) as String
         }
 
+        val llCity = binding.llCity
+        val pbLoading = binding.pbLoading
         val llWeatherInfo1 = binding.llWeatherInfo1
         val llWeatherInfo2 = binding.llWeatherInfo2
-        val progressbar = binding.pbLoading
-        val llCity = binding.llCity
-        val locationError = binding.tvLocationError
-        val llLocation = binding.llLocation
 
         val currentWeatherObserver = Observer<ApiWeather> { apiWeather ->
             if (apiWeather.current != null) {
-                llWeatherInfo1.visibility = View.VISIBLE
-                llWeatherInfo2.visibility = View.VISIBLE
-                locationError.visibility = View.GONE
-
                 binding.currentWeather = apiWeather.current
                 binding.location = apiWeather.location
 
             } else {
-                llWeatherInfo1.visibility = View.GONE
-                llWeatherInfo2.visibility = View.GONE
-                llLocation.visibility = View.VISIBLE
-                locationError.visibility = View.VISIBLE
-
                 binding.currentWeather = null
                 binding.location = null
 
@@ -70,7 +59,7 @@ class CurrentForecastFragment : BaseActivity() {
                 ).show()
             }
 
-            progressbar.visibility = View.GONE
+            pbLoading.visibility = View.GONE
         }
 
         forecastRepository.currentWeather.observe(viewLifecycleOwner, currentWeatherObserver)
@@ -78,7 +67,7 @@ class CurrentForecastFragment : BaseActivity() {
         val savedLocationObserver = Observer<Location> { savedLocation ->
             when (savedLocation) {
                 is Location.Zipcode -> {
-                    progressbar.visibility = View.VISIBLE
+                    pbLoading.visibility = View.VISIBLE
                     llWeatherInfo1.visibility = View.GONE
                     llWeatherInfo2.visibility = View.GONE
 
