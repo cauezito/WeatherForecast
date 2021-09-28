@@ -3,6 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="currentWeather"
+            type="br.com.cauezito.simpleweatherforecast.api.CurrentWeather" />
+
+        <variable
+            name="location"
+            type="br.com.cauezito.simpleweatherforecast.api.Location" />
+
+        <variable
+            name="forecastUtil"
+            type="br.com.cauezito.simpleweatherforecast.util.ForecastUtil" />
+
+        <variable
+            name="temperatureDisplay"
+            type="br.com.cauezito.simpleweatherforecast.util.TemperatureDisplaySetting" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -84,7 +103,7 @@
                                 android:layout_marginEnd="10dp"
                                 android:layout_marginBottom="4dp"
                                 android:fontFamily="@font/roboto_regular"
-                                android:text="@string/location"
+                                android:text='@{location.name ?? "Inserir local"}'
                                 android:textColor="@color/white"
                                 android:textSize="14sp" />
 
@@ -92,7 +111,6 @@
                                 android:id="@+id/imageView21"
                                 android:layout_width="12dp"
                                 android:layout_height="12dp"
-
                                 android:layout_marginEnd="1dp"
                                 app:srcCompat="@drawable/pencil_icon" />
                         </LinearLayout>
@@ -126,7 +144,7 @@
                                 android:layout_marginTop="5dp"
                                 android:layout_marginEnd="10dp"
                                 android:fontFamily="@font/roboto_regular"
-                                android:text="Nublado"
+                                android:text="@{currentWeather.weatherDescriptions.get(0)}"
                                 android:textColor="@color/black"
                                 android:textSize="12sp" />
 
@@ -139,7 +157,7 @@
                             android:layout_marginStart="18dp"
                             android:layout_marginTop="24dp"
                             android:fontFamily="@font/roboto_regular"
-                            android:text="21"
+                            android:text="@{forecastUtil.Companion.formatForecastForShow(currentWeather.temperature, temperatureDisplay.Celsius)}"
                             android:textColor="@color/black"
                             android:textSize="60sp" />
 
@@ -169,9 +187,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginTop="5dp"
-
                                 android:fontFamily="@font/roboto_regular"
-                                android:text="Nublado"
+                                android:text="@{String.valueOf(currentWeather.windSpeed)}"
                                 android:textColor="@color/black"
                                 android:textSize="12sp" />
 
@@ -206,7 +223,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:fontFamily="@font/roboto_regular"
-                                android:text="49% Umidade"
+                                android:text="@{String.valueOf(currentWeather.humidity)}"
                                 android:textColor="@color/black"
                                 android:textSize="12sp" />
 
@@ -230,7 +247,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:fontFamily="@font/roboto_regular"
-                                android:text="Nublado"
+                                android:text="@{String.valueOf(currentWeather.precipitation)}"
                                 android:textColor="@color/black"
                                 android:textSize="12sp" />
 
@@ -254,7 +271,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:fontFamily="@font/roboto_regular"
-                                android:text="Nublado"
+                                android:text="@{String.valueOf(currentWeather.feelslike)}"
                                 android:textColor="@color/black"
                                 android:textSize="12sp" />
 

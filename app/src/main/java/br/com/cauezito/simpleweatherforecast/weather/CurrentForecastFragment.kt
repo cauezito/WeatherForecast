@@ -16,8 +16,6 @@ import br.com.cauezito.simpleweatherforecast.databinding.FragmentCurrentForecast
 import br.com.cauezito.simpleweatherforecast.repository.ForecastRepository
 import br.com.cauezito.simpleweatherforecast.repository.Location
 import br.com.cauezito.simpleweatherforecast.repository.LocationRepository
-import br.com.cauezito.simpleweatherforecast.util.ForecastUtil
-import br.com.cauezito.simpleweatherforecast.util.TemperatureDisplaySetting
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
@@ -43,15 +41,8 @@ class CurrentForecastFragment : BaseActivity() {
         val llWeatherInfo1 = binding.llWeatherInfo1
         val llWeatherInfo2 = binding.llWeatherInfo2
         val progressbar = binding.pbLoading
-        val temperature = binding.tvTemperature
-        val location = binding.tvLocation
         val llCity = binding.llCity
         val locationError = binding.tvLocationError
-        val weatherDescription = binding.tvWeatherDescription
-        val windSpeed = binding.tvWindSpeed
-        val humidity = binding.tvHumidity
-        val precipitation = binding.tvPrecipitation
-        val feelsLike = binding.tvFeelsLike
         val llLocation = binding.llLocation
 
         val currentWeatherObserver = Observer<ApiWeather> { apiWeather ->
@@ -60,24 +51,18 @@ class CurrentForecastFragment : BaseActivity() {
                 llWeatherInfo2.visibility = View.VISIBLE
                 locationError.visibility = View.GONE
 
-                temperature.text = ForecastUtil.formatForecastForShow(
-                    apiWeather?.current?.temperature,
-                    TemperatureDisplaySetting.Celsius
-                )
-                location.text = apiWeather.location.name
-                weatherDescription.text = apiWeather.current.weatherDescriptions.get(0)
-                windSpeed.text = apiWeather.current.windSpeed.toString()
-                humidity.text = apiWeather.current.humidity.toString()
-                precipitation.text = apiWeather.current.precipitation.toString()
-                feelsLike.text = apiWeather.current.feelslike.toString()
+                binding.currentWeather = apiWeather.current
+                binding.location = apiWeather.location
+
             } else {
                 llWeatherInfo1.visibility = View.GONE
                 llWeatherInfo2.visibility = View.GONE
-
                 llLocation.visibility = View.VISIBLE
                 locationError.visibility = View.VISIBLE
 
-                location.text = "Inserir local"
+                binding.currentWeather = null
+                binding.location = null
+
                 Toast.makeText(
                     activity,
                     "Não foi possível recuperar a previsão. Você digitou o local correto?",
