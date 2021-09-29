@@ -1,11 +1,11 @@
 package br.com.cauezito.simpleweatherforecast.weather
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +17,7 @@ import br.com.cauezito.simpleweatherforecast.repository.ForecastRepository
 import br.com.cauezito.simpleweatherforecast.repository.Location
 import br.com.cauezito.simpleweatherforecast.repository.LocationRepository
 import br.com.cauezito.simpleweatherforecast.util.SharedPreferencesUtil
+import br.com.cauezito.simpleweatherforecast.weather.current.CurrentForecastFragment
 
 class WeeklyForecastFragment : Fragment() {
 
@@ -65,7 +66,7 @@ class WeeklyForecastFragment : Fragment() {
             when (savedLocation) {
                 is Location.Zipcode -> {
                     pbLoading.visibility = View.VISIBLE
-                    forecastRepository.loadWeeklyForecast(savedLocation.zipcode)
+                    //forecastRepository.loadWeeklyForecast(savedLocation.zipcode)
                 }
             }
         }

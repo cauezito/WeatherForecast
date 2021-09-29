@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_location_entry"/>
     <fragment
         android:id="@+id/currentForecastFragment"
-        android:name="br.com.cauezito.simpleweatherforecast.weather.CurrentForecastFragment"
+        android:name="br.com.cauezito.simpleweatherforecast.weather.current.CurrentForecastFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_current_forecast">
         <action

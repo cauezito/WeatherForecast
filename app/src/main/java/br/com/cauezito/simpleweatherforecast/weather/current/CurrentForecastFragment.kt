@@ -1,4 +1,4 @@
-package br.com.cauezito.simpleweatherforecast.weather
+package br.com.cauezito.simpleweatherforecast.weather.current
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import br.com.cauezito.simpleweatherforecast.BaseActivity
 import br.com.cauezito.simpleweatherforecast.ModalTaskListener
@@ -23,7 +24,10 @@ class CurrentForecastFragment : BaseActivity() {
 
     private val forecastRepository = ForecastRepository()
     private lateinit var locationRepository: LocationRepository
-    private lateinit var zipcode: String
+    private var zipcode: String = ""
+    private val viewModelFactory = CurrentWeatherViewModelFactory(forecastRepository)
+    private val viewModel: CurrentWeatherViewModel by viewModels(
+        factoryProducer = { viewModelFactory })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,7 +66,7 @@ class CurrentForecastFragment : BaseActivity() {
             pbLoading.visibility = View.GONE
         }
 
-        forecastRepository.currentWeather.observe(viewLifecycleOwner, currentWeatherObserver)
+        viewModel.currentWeather.observe(viewLifecycleOwner, currentWeatherObserver)
 
         val savedLocationObserver = Observer<Location> { savedLocation ->
             when (savedLocation) {
@@ -71,7 +75,7 @@ class CurrentForecastFragment : BaseActivity() {
                     llWeatherInfo1.visibility = View.GONE
                     llWeatherInfo2.visibility = View.GONE
 
-                    forecastRepository.loadCurrentForecast(savedLocation.zipcode)
+                    viewModel.loadCurrentForecast(savedLocation.zipcode)
                 }
             }
         }
@@ -80,7 +84,6 @@ class CurrentForecastFragment : BaseActivity() {
         locationRepository.savedLocation.observe(viewLifecycleOwner, savedLocationObserver)
 
         llCity.setOnClickListener(View.OnClickListener {
-            //todo entender object:
             openLocationModal(object : OnInsertLocation {
                 override fun setLocation(location: String) {
                     locationRepository.saveLocation(Location.Zipcode(location))
