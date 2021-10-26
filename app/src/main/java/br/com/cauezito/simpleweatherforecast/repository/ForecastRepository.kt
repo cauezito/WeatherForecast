@@ -6,8 +6,8 @@ import retrofit2.Response
 
 class ForecastRepository {
 
-    fun loadCurrentForecast(zipcode: String, callback: OperationCallback<ApiWeather>) {
-        val call = createOpenWeatherMapService().getCurrentWeatherByZipcode(zipcode, "metric")
+    fun loadCurrentForecast(city: String, callback: OperationCallback<ApiWeather>) {
+        val call = createOpenWeatherMapService().getCurrentWeatherByCity(city, "metric")
 
         call.enqueue(object : DefaultCallback<ApiWeather>() {
             override fun onSuccess(response: Response<ApiWeather>, code: Int) {

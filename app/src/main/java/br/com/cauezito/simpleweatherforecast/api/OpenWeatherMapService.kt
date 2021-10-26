@@ -39,7 +39,7 @@ fun createOpenWeatherMapService(): OpenWeatherMapService {
 interface OpenWeatherMapService {
 
     @GET("current")
-    fun getCurrentWeatherByZipcode(
+    fun getCurrentWeatherByCity(
         @Query("query") location: String, @Query("unit") unit: String = "m"
     ): Call<ApiWeather>
 }

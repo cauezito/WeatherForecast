@@ -51,6 +51,7 @@ class CurrentForecastFragment : BaseActivity() {
             apiWeather?.let {
                 binding.currentWeather = apiWeather.current
                 binding.location = apiWeather.location
+
             } ?: run {
                 binding.currentWeather = null
                 binding.location = null
