@@ -7,7 +7,7 @@ O aplicativo consome os dados da API https://weatherstack.com e exibe informaç�
 - Nome do local pesquisado
 - Velocidade do vento
 
-**Por limitações técnicas (plano free) não foi possível recuperar o clima de toda a semana, somente do dia.*
+*Por limitações técnicas (plano free) não foi possível recuperar o clima de toda a semana, somente do dia.*
 
 A ideia foi colocar em prática a implementação de:
 - Arquitetura MVVM
