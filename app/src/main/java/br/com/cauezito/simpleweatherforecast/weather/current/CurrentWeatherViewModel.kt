@@ -24,6 +24,8 @@ class CurrentWeatherViewModel(private val forecastRepository: ForecastRepository
         forecastRepository.loadCurrentForecast(zipcode, object : OperationCallback<ApiWeather> {
             override fun onSuccess(data: ApiWeather?) {
                 _currentWeather.value = data
+
+                if (data?.current == null) onError("")
             }
 
             override fun onError(message: String) {

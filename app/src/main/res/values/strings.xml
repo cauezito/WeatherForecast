@@ -10,4 +10,6 @@
 
     <string name="please_insert_location">Por favor, insira um local para obter informações climáticas!</string>
     <string name="location">Inserir local</string>
+
+    <string name="error_message">Não foi possível recuperar a previsão. Você digitou o local correto?</string>
 </resources>

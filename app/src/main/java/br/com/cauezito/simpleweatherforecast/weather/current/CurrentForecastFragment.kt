@@ -48,17 +48,16 @@ class CurrentForecastFragment : BaseActivity() {
         val llWeatherInfo2 = binding.llWeatherInfo2
 
         val currentWeatherObserver = Observer<ApiWeather> { apiWeather ->
-            if (apiWeather.current != null) {
+            apiWeather?.let {
                 binding.currentWeather = apiWeather.current
                 binding.location = apiWeather.location
-
-            } else {
+            } ?: run {
                 binding.currentWeather = null
                 binding.location = null
 
                 Toast.makeText(
                     activity,
-                    "Não foi possível recuperar a previsão. Você digitou o local correto?",
+                    getString(R.string.error_message),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -122,7 +121,7 @@ class CurrentForecastFragment : BaseActivity() {
     companion object {
         const val KEY_ZIPCODE = "KEY_ZIP_CODE"
 
-        @JvmStatic // if your Kotlin code is called from Java, it makes sense to add the annotation
+        @JvmStatic
         fun newInstance(zipcode: String) =
             CurrentForecastFragment().apply {
                 arguments = Bundle().apply {
