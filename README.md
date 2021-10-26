@@ -20,6 +20,11 @@ A ideia foi colocar em prática a implementação de:
 
 *Por limitações técnicas (plano free) não foi possível recuperar o clima de toda a semana, somente do dia.*
 
+---
+Para executar, é necessário criar uma conta na plataforma e obter a API KEY, após isso, basta criar uma nova linha no arquivo
+local.properties. Exemplo: API_URL="apikey"
+
+
 Screenshots
 
 ![Screenshot_1635228229](https://user-images.githubusercontent.com/44878255/138819175-4bc4d06c-8ec0-4564-9f5c-b5738dd17f8d.png)
